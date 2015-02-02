@@ -1,6 +1,6 @@
 import "oaidl.idl";
 import "ocidl.idl";
-import "..\ViewMdl\viewmdl_contract_i.idl";
+import "..\model-libs\ViewMdl\viewmdl_contract_i.idl";
 
 [
 	object,

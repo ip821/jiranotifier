@@ -6,7 +6,7 @@
 
 import "oaidl.idl";
 import "ocidl.idl";
-import "..\objmdl\objmdl_contract_i.idl";
+import "..\model-libs\objmdl\objmdl_contract_i.idl";
 import "jiraconnection_contract_i.idl";
 
 [
@@ -33,7 +33,7 @@ library JiraConnectionLib
 	coclass JiraObjectsCollection
 	{
 		[default] interface IJiraObjectsCollection;
-		interface IObjectArray;
+		interface IObjArray;
 		interface IPersistStorage;
 	};
 

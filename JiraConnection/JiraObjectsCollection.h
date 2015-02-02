@@ -22,15 +22,16 @@ public:
 	BEGIN_COM_MAP(CJiraObjectsCollection)
 		COM_INTERFACE_ENTRY(IJiraObjectsCollection)
 		COM_INTERFACE_ENTRY(IPersistStorage)
-		COM_INTERFACE_ENTRY_AGGREGATE(IID_IObjectCollection, m_pCollection)
-		COM_INTERFACE_ENTRY_AGGREGATE(IID_IObjectArray, m_pCollection)
+		COM_INTERFACE_ENTRY_AGGREGATE(IID_IObjCollection, m_pCollection)
+		COM_INTERFACE_ENTRY_AGGREGATE(IID_IObjArray, m_pCollection)
 	END_COM_MAP()
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 	HRESULT FinalConstruct()
 	{
-		return m_pCollection.CoCreateInstance(CLSID_EnumerableObjectCollection);
+		RETURN_IF_FAILED(HrCoCreateInstance(CLSID_ObjectCollection, &m_pCollection));
+		return S_OK;
 	}
 
 	void FinalRelease()
@@ -38,7 +39,7 @@ public:
 	}
 
 private:
-	CComPtr<IObjectCollection> m_pCollection;
+	CComPtr<IObjCollection> m_pCollection;
 public:
 
 	STDMETHOD(GetClassID(CLSID *pClassID));

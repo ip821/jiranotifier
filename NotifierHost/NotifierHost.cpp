@@ -28,9 +28,10 @@ int Run(LPTSTR /*lpstrCmdLine*/ = NULL, int nCmdShow = SW_SHOWDEFAULT)
 		_Module.AddMessageLoop(&theLoop);
 
 		SetCurrentDirectoryToApplicationRoot();
-		g_hObjMdl = LoadLibrary(L"ObjMdl.dll");
-		GetPluginManager()->InitializePluginLibraryByName(L"ViewMdl.dll");
-		GetPluginManager()->InitializePluginLibraryByName(L"NotificationServices.dll");
+		g_hObjMdl = LoadLibrary(L"objmdl.dll");
+		GetPluginManager()->InitializePluginLibraryByHandle(g_hObjMdl);
+		GetPluginManager()->InitializePluginLibraryByName(L"viewmdl.dll");
+		GetPluginManager()->InitializePluginLibraryByName(L"asyncsvc.dll");
 		GetPluginManager()->LoadPlugins(NULL);
 
 		CComObject<CMainDlg>* pMainDlg;

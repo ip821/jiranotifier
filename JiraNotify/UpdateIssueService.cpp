@@ -14,7 +14,7 @@ STDMETHODIMP CUpdateIssueService::Load(ISettings *pSettings)
 {
 	CHECK_E_POINTER(pSettings);
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		boost::lock_guard<boost::mutex> lock(m_mutex);
 		m_pSettings = pSettings;
 	}
 	return S_OK;
@@ -27,6 +27,7 @@ STDMETHODIMP CUpdateIssueService::OnInitialized(IServiceProvider *pServiceProvid
 	RETURN_IF_FAILED(QueryInterface(__uuidof(IUnknown), (LPVOID*)&pUnk));
 	RETURN_IF_FAILED(pServiceProvider->QueryService(CLSID_ThreadService, &m_pThreadService));
 	RETURN_IF_FAILED(AtlAdvise(m_pThreadService, pUnk, __uuidof(IThreadServiceEventSink), &m_dwAdvice));
+	RETURN_IF_FAILED(pServiceProvider->QueryService(CLSID_TimerService, &m_pTimerService));
 	return S_OK;
 }
 
@@ -35,12 +36,14 @@ STDMETHODIMP CUpdateIssueService::OnShutdown()
 	RETURN_IF_FAILED(AtlUnadvise(m_pThreadService, __uuidof(IThreadServiceEventSink), m_dwAdvice));
 	m_pSettings.Release();
 	m_pThreadService.Release();
+	m_pTimerService.Release();
 	return S_OK;
 }
 
 STDMETHODIMP CUpdateIssueService::OnStart(IVariantObject* pResult)
 {
 	CHECK_E_POINTER(pResult);
+	RETURN_IF_FAILED(m_pTimerService->StopTimer());
 	return S_OK;
 }
 
@@ -49,7 +52,7 @@ STDMETHODIMP CUpdateIssueService::OnRun(IVariantObject* pResult)
 	CHECK_E_POINTER(pResult);
 	CComPtr<ISettings> pSettings;
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		boost::lock_guard<boost::mutex> lock(m_mutex);
 		pSettings = m_pSettings;
 	}
 	CComBSTR bstrServer;
@@ -125,6 +128,7 @@ STDMETHODIMP CUpdateIssueService::OnRun(IVariantObject* pResult)
 STDMETHODIMP CUpdateIssueService::OnFinish(IVariantObject* pResult)
 {
 	CHECK_E_POINTER(pResult);
+	RETURN_IF_FAILED(m_pTimerService->ResumeTimer());
 	return S_OK;
 }
 
@@ -179,7 +183,7 @@ HRESULT CUpdateIssueService::Diff(IJiraObjectsCollection* pFirstCollection, IJir
 HRESULT CUpdateIssueService::FillKeysVector(TStringVector& destVector, IJiraObjectsCollection* pSourceCollection)
 {
 	CHECK_E_POINTER(pSourceCollection);
-	CComQIPtr<IObjectArray> pSafe = pSourceCollection;
+	CComQIPtr<IObjArray> pSafe = pSourceCollection;
 
 	UINT ulCount = 0;
 	HRESULT hr = pSafe->GetCount(&ulCount);

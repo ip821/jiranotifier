@@ -36,8 +36,9 @@ public:
 private:
 	CComPtr<ISettings> m_pSettings;
 	CComPtr<IThreadService> m_pThreadService;
+	CComPtr<ITimerService> m_pTimerService;
 	DWORD m_dwAdvice = 0;
-	std::mutex m_mutex;
+	boost::mutex m_mutex;
 
 	HRESULT Diff(IJiraObjectsCollection* pFirstCollection, IJiraObjectsCollection* pSecondCollection, IVariantObject* pResultObject);
 	HRESULT FillKeysVector(TStringVector& destVector, IJiraObjectsCollection* pSourceCollection);

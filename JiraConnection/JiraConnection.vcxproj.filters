@@ -43,9 +43,6 @@
     <ClCompile Include="JiraConnection_i.c">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ObjMdl\objmdl_contract_i.c">
-      <Filter>ZZZMisc\Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="PluginTable.cpp">
       <Filter>ZZZMisc\Source Files</Filter>
     </ClCompile>
@@ -60,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="JiraObjectsCollection.cpp">
       <Filter>JiraObjectsCollection</Filter>
+    </ClCompile>
+    <ClCompile Include="objmdl_contract_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,9 +84,6 @@
     <ClInclude Include="JiraMethods.h">
       <Filter>ZZZMisc\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ObjMdl\objmdl_contract_i.h">
-      <Filter>ZZZMisc\Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="PluginTable.h">
       <Filter>ZZZMisc\Header Files</Filter>
     </ClInclude>
@@ -104,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="JiraRestConnection.h">
       <Filter>JiraRestConnection</Filter>
+    </ClInclude>
+    <ClInclude Include="objmdl_contract_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,10 +138,10 @@
     <Midl Include="JiraConnection.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="..\ObjMdl\objmdl_contract_i.idl">
+    <Midl Include="jiraconnection_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="jiraconnection_contract_i.idl">
+    <Midl Include="..\model-libs\ObjMdl\objmdl_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
   </ItemGroup>

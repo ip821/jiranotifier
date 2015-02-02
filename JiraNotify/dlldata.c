@@ -21,6 +21,7 @@ extern "C"   {
 
 EXTERN_PROXY_FILE( JiraNotify )
 EXTERN_PROXY_FILE( NotificationServices_contract_i )
+EXTERN_PROXY_FILE( asyncsvc_contract_i )
 EXTERN_PROXY_FILE( jiraconnection_contract_i )
 EXTERN_PROXY_FILE( jiranotifier_contract_i )
 EXTERN_PROXY_FILE( notifierhost_contract_i )
@@ -32,6 +33,7 @@ PROXYFILE_LIST_START
 /* Start of list */
   REFERENCE_PROXY_FILE( JiraNotify ),
   REFERENCE_PROXY_FILE( NotificationServices_contract_i ),
+  REFERENCE_PROXY_FILE( asyncsvc_contract_i ),
   REFERENCE_PROXY_FILE( jiraconnection_contract_i ),
   REFERENCE_PROXY_FILE( jiranotifier_contract_i ),
   REFERENCE_PROXY_FILE( notifierhost_contract_i ),

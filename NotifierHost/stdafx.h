@@ -44,11 +44,12 @@ extern CAppModule _Module;
 #include <Shobjidl.h>
 
 #include <initguid.h>
-#include "..\ObjMdl\Plugins.h"
-#include "..\ObjMdl\Functions.h"
+#include "..\model-libs\ObjMdl\Plugins.h"
+#include "..\model-libs\ObjMdl\Functions.h"
+#include "..\model-libs\ObjMdl\Metadata.h"
 
-#include "..\ViewMdl\Plugins.h"
-#include "..\ViewMdl\Functions.h"
+#include "..\model-libs\ViewMdl\Plugins.h"
+#include "..\model-libs\ViewMdl\Functions.h"
 
 #include "..\JiraConnection\Plugins.h"
 #include "..\JiraConnection\JiraFields.h"

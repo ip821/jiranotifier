@@ -1,6 +1,6 @@
 import "oaidl.idl";
 import "ocidl.idl";
-import "..\objmdl\objmdl_contract_i.idl";
+import "..\model-libs\objmdl\objmdl_contract_i.idl";
 
 [
 	object,

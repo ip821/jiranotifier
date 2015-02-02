@@ -37,15 +37,17 @@
 #include  <vector>
 #include  <list>
 #include  <algorithm>
-#include  <mutex>
+#include <boost/thread/condition_variable.hpp>
 
 #include <initguid.h>
-#include "..\ObjMdl\Plugins.h"
-#include "..\ObjMdl\Macros.h"
-#include "..\ObjMdl\Functions.h"
-#include "..\ViewMdl\Plugins.h"
-#include "..\ViewMdl\Functions.h"
-#include "..\NotificationServices\Plugins.h"
+#include "..\model-libs\ObjMdl\Plugins.h"
+#include "..\model-libs\ObjMdl\Macros.h"
+#include "..\model-libs\ObjMdl\Functions.h"
+#include "..\model-libs\ObjMdl\Metadata.h"
+#include "..\model-libs\ViewMdl\Plugins.h"
+#include "..\model-libs\ViewMdl\Functions.h"
+#include "..\model-libs\asyncsvc\Plugins.h"
+#include "..\model-libs\asyncsvc\Metadata.h"
 #include "..\NotifierHost\Plugins.h"
 #include "..\JiraConnection\Plugins.h"
 
@@ -54,3 +56,5 @@
 #define KEY_PASSWORD L"Password"
 #define KEY_HAS_CHANGES L"HasChanges"
 #define KEY_HAS_MESSAGE L"HasMessage"
+
+using namespace IP;

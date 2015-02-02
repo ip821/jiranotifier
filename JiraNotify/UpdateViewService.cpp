@@ -32,7 +32,7 @@ STDMETHODIMP CUpdateViewService::OnInitialized(IServiceProvider *pServiceProvide
 
 	UINT uTimeout = 10;
 	CComVariant vInterval;
-	if (SUCCEEDED(m_pSettings->GetVariantValue(KEY_TIMER_INTERVAL, &vInterval)) && vInterval.vt == VT_I4)
+	if (SUCCEEDED(m_pSettings->GetVariantValue(AsyncServices::Metadata::Timer::Interval, &vInterval)) && vInterval.vt == VT_I4)
 		uTimeout = vInterval.intVal;
 
 	CComPtr<ITimerService> pTimerService;
@@ -83,7 +83,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 	RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNormalIcon());
 
 	CComVariant vHr;
-	RETURN_IF_FAILED(pResult->GetVariantValue(KEY_HRESULT, &vHr));
+	RETURN_IF_FAILED(pResult->GetVariantValue(AsyncServices::Metadata::Thread::HResult, &vHr));
 	HRESULT hr = S_OK;
 	if (vHr.vt == VT_I4)
 		hr = vHr.lVal;

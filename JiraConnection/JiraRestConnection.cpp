@@ -168,7 +168,7 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
-	CComPtr<IObjectCollection> pCollection;
+	CComPtr<IObjCollection> pCollection;
 	RETURN_IF_FAILED(pCollectionClass->QueryInterface(&pCollection));
 
 	for (auto it = issues.begin(); it != issues.end(); it++)
@@ -220,7 +220,7 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
-	CComPtr<IObjectCollection> pCollection;
+	CComPtr<IObjCollection> pCollection;
 	RETURN_IF_FAILED(pCollectionClass->QueryInterface(&pCollection));
 
 	auto filters = value.as_array();

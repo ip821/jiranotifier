@@ -95,6 +95,7 @@ public:
 	STDMETHOD(GetMainMenu)(IMenu** ppMenu);
 	STDMETHOD(GetToolbar)(IToolbar** ppToolbar);
 	STDMETHOD(GetStatusBar)(IStatusBar** ppStatusBar);
+	METHOD_EMPTY(STDMETHOD(SetFlags)(MainWindowFlags flags));
 
 	STDMETHOD(GetHWND)(HWND *hWnd);
 	STDMETHOD(CreateEx)(HWND hWndParent, HWND *hWnd);

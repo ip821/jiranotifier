@@ -70,9 +70,6 @@
     <ClCompile Include="ObjectStorageManager.cpp">
       <Filter>ObjectStore</Filter>
     </ClCompile>
-    <ClCompile Include="NotificationServices_contract_i.c">
-      <Filter>ZZZMisc\Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="objmdl_contract_i.c">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="SettingsFactory.cpp">
       <Filter>SettingsFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="asyncsvc_contract_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +135,6 @@
     <ClInclude Include="ObjectStorageManager.h">
       <Filter>ObjectStore</Filter>
     </ClInclude>
-    <ClInclude Include="NotificationServices_contract_i.h">
-      <Filter>ZZZMisc\Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="objmdl_contract_i.h">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClInclude>
@@ -167,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="SettingsFactory.h">
       <Filter>SettingsFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="asyncsvc_contract_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -201,19 +201,19 @@
     <Midl Include="JiraNotify.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="..\ObjMdl\objmdl_contract_i.idl">
-      <Filter>ZZZMisc\Source Files</Filter>
-    </Midl>
-    <Midl Include="..\ViewMdl\viewmdl_contract_i.idl">
-      <Filter>ZZZMisc\Source Files</Filter>
-    </Midl>
-    <Midl Include="..\NotificationServices\NotificationServices_contract_i.idl">
-      <Filter>ZZZMisc\Source Files</Filter>
-    </Midl>
     <Midl Include="..\JiraConnection\jiraconnection_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
     <Midl Include="..\NotifierHost\notifierhost_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="..\model-libs\ViewMdl\viewmdl_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="..\model-libs\ObjMdl\objmdl_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="..\model-libs\asyncsvc\asyncsvc_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
   </ItemGroup>

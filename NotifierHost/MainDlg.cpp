@@ -94,7 +94,7 @@ LRESULT CMainDlg::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 		return 0;
 
 	bHandled = FALSE;
-	CComPtr<IObjectArray> pObjectArray;
+	CComPtr<IObjArray> pObjectArray;
 	RETURN_IF_FAILED(m_pPluginSupport->GetPlugins(&pObjectArray));
 	UINT cb = 0;
 	RETURN_IF_FAILED(pObjectArray->GetCount(&cb));
