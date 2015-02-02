@@ -1,0 +1,13 @@
+import "oaidl.idl";
+import "ocidl.idl";
+import "..\ViewMdl\viewmdl_contract_i.idl";
+
+[
+	object,
+	uuid(BD449A39-A6C2-4C2B-B53D-C5257D1E2F96),
+	pointer_default(unique)
+]
+interface IMainDialog : IMainWindow
+{
+	HRESULT GetSystrayWindow(ISystrayWindow** ppSystrayWindow);
+};

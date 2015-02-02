@@ -1,0 +1,143 @@
+// JiraNotify.idl : IDL source for JiraNotify
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (JiraNotify.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "..\objmdl\objmdl_contract_i.idl";
+import "..\viewmdl\viewmdl_contract_i.idl";
+import "..\NotificationServices\NotificationServices_contract_i.idl";
+import "..\JiraConnection\JiraConnection_contract_i.idl";
+import "..\NotifierHost\NotifierHost_contract_i.idl";
+
+[
+	object,
+	uuid(F34F1518-F5DD-45F5-80E6-479C8F2C357D),
+	pointer_default(unique)
+]
+interface IObjectStorage : IUnknown
+{
+	[id(1)] HRESULT OpenStorage(BSTR bstrStorage, BOOL bWrite, IStorage** ppStorage);
+};
+
+[
+	object,
+	uuid(0D1F6801-9F72-43D7-BC66-539611A4ECFF),
+	pointer_default(unique)
+]
+interface IObjectStorageManager : IUnknown
+{
+	[id(1)] HRESULT OpenObjectStorage(BSTR bstrStoreName, BOOL bWrite, IObjectStorage** ppObjectStorage);
+};
+
+[
+	object,
+	uuid(C0109BFA-A495-421A-A617-2792EBE19231),
+	pointer_default(unique)
+]
+interface IUpdateIssueService : IUnknown
+{
+};
+
+[
+	object,
+	uuid(9F72F815-1CC9-43FD-8580-336B9BDF0E13),
+	pointer_default(unique)
+]
+interface ITrayNotifyManager : IUnknown
+{
+	HRESULT Initialize(ISystrayWindow* pSystrayWindow);
+	HRESULT Shutdown();
+	HRESULT ResetIconToNormalIfPossible();
+	HRESULT ShowBaloon(LPCTSTR lpszText, LPCTSTR lpszCaption, SystrayBalloonStyle style, UINT uTimeout);
+	HRESULT ShowErrorIcon();
+	HRESULT ShowNewItemsIcon();
+	HRESULT ShowNormalIcon();
+	HRESULT ShowUpdateIcon();
+};
+
+[
+	object,
+	uuid(52CC2321-28EA-42D8-AC81-5524232735C5),
+	pointer_default(unique)
+]
+interface IUpdateViewService : IUnknown
+{
+	HRESULT GetTrayNotifyManager(ITrayNotifyManager** ppTrayNotifyManager);
+};
+
+[
+	uuid(4A3C3156-E65B-49AA-B213-15DC2EB2F8A1),
+	version(1.0),
+]
+library JiraNotifyLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(6EA78630-DC6D-4D2B-91F0-686B260F29D6)
+	]
+	coclass PluginTable
+	{
+		[default] interface IPluginTable;
+	};
+	[
+		uuid(74DBF211-260F-4E4E-995E-3CF8AE95F979)
+	]
+	coclass ObjectStorage
+	{
+		[default] interface IObjectStorage;
+	};
+	[
+		uuid(F5AF00F8-73E3-4CE5-8D45-E32B40628D74)
+	]
+	coclass ObjectStorageManager
+	{
+		[default] interface IObjectStorageManager;
+	};
+	[
+		uuid(919DE6D7-EC71-4913-A2CA-6504C5904CFE)		
+	]
+	coclass UpdateIssueService
+	{
+		[default] interface IUpdateIssueService;
+	};
+	[
+		uuid(2108A036-76B6-407D-BA5F-EE6DA5301A2E)		
+	]
+	coclass UpdateViewService
+	{
+		[default] interface IUpdateViewService;
+	};
+	[
+		uuid(11F756D4-7BD4-4A51-B9F1-297362E08C1A)
+	]
+	coclass SettingsControl
+	{
+		[default] interface IControl;
+	};
+	[
+		uuid(E422C3C7-491D-4715-A614-9ACBFD9E1B5C)
+	]
+	coclass OpenJiraCommand
+	{
+		[default] interface IControl;
+	};
+	[
+		uuid(AB07F1CA-589D-4F9E-85E1-0D6BB5E439B6)
+	]
+	coclass TrayNotifyManager
+	{
+		[default] interface ITrayNotifyManager;
+	};
+	[
+		uuid(CA6C6762-02B5-4305-8369-017E669E81D0)
+	]
+	coclass SettingsFactoryImpl
+	{
+		[default] interface ISettingsFactory;
+	};
+};
+
+import "shobjidl.idl";

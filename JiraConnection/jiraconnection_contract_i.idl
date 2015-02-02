@@ -1,0 +1,40 @@
+import "oaidl.idl";
+import "ocidl.idl";
+import "..\objmdl\objmdl_contract_i.idl";
+
+[
+	object,
+	uuid(545F0CA9-EDBD-41BB-9AEF-B93183F7DB96),
+	pointer_default(unique)
+]
+interface IJiraObjectsCollection : IUnknown
+{
+
+};
+
+[
+	object,
+	uuid(AB0FC7BB-4C68-4F4F-87C8-9CE2B289531E),
+	pointer_default(unique)
+]
+interface IJiraObject : IUnknown
+{
+
+};
+
+[
+	object,
+	uuid(3E52A2BF-16E4-4100-8A1E-D8B4CEEF7A3A),
+	pointer_default(unique)
+]
+interface IJiraConnection : IUnknown
+{
+	[id(1)] HRESULT OpenConnection([in]BSTR bstrUri);
+	[id(2)] HRESULT Login([in]BSTR bstrUser, [in]BSTR bstrPwd);
+	[id(3)] HRESULT Logout();
+	[id(4)] HRESULT CloseConnection();
+	[id(5)] HRESULT GetFavoriteFilters([out, retval]IJiraObjectsCollection** ppCollection);
+	[id(6)] HRESULT GetIssuesByFilter([in]BSTR bstrFilterId, [out, retval]IJiraObjectsCollection** ppCollection);
+	[id(7)] HRESULT GetCurrentUser([out, retval]IJiraObject** ppObject);
+	[id(8)] HRESULT GetIssuesByCriteria([in]BSTR bstrSearchCriteria, [out, retval]IJiraObjectsCollection** ppCollection);
+};

@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="JiraObject">
+      <UniqueIdentifier>{a9e7b4a1-d52f-4766-bf25-739bc52e7236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JiraObjectsCollection">
+      <UniqueIdentifier>{cfa2b32b-f125-4608-a6fd-2a3ff7898561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JiraRestConnection">
+      <UniqueIdentifier>{fb08b307-ca14-4487-ac56-1bf591009845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZZZMisc">
+      <UniqueIdentifier>{51dee2ed-56a3-47cc-963b-94e66377f123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZZZMisc\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ZZZMisc\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ZZZMisc\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="ZZZMisc\Generated Files">
+      <UniqueIdentifier>{29f93949-6f1a-4451-a066-058eb6bdfb26}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraConnection.cpp">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraConnection_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ObjMdl\objmdl_contract_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PluginTable.cpp">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraConnection_contract_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraObject.cpp">
+      <Filter>JiraObject</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraRestConnection.cpp">
+      <Filter>JiraRestConnection</Filter>
+    </ClCompile>
+    <ClCompile Include="JiraObjectsCollection.cpp">
+      <Filter>JiraObjectsCollection</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dllmain.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraConnection_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraFields.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraMethods.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ObjMdl\objmdl_contract_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginTable.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraConnection_contract_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins.h">
+      <Filter>ZZZMisc\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraObject.h">
+      <Filter>JiraObject</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraObjectsCollection.h">
+      <Filter>JiraObjectsCollection</Filter>
+    </ClInclude>
+    <ClInclude Include="JiraRestConnection.h">
+      <Filter>JiraRestConnection</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="JiraConnection.rc">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="JiraConnection.def">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </None>
+    <None Include="JiraObjectsCollection.rgs">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </None>
+    <None Include="JiraObject.rgs">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </None>
+    <None Include="JiraXmlRpcConnection2.rgs">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </None>
+    <None Include="JiraConnection.rgs">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </None>
+    <None Include="JiraXmlRpcConnection.rgs">
+      <Filter>ZZZMisc\Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt">
+      <Filter>ZZZMisc</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="JiraConnection.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="..\ObjMdl\objmdl_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="jiraconnection_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+  </ItemGroup>
+</Project>

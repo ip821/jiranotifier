@@ -1,0 +1,4 @@
+How to fix https connectivity:
+
+uncheck  "Check for server certificate revocation" checkbox in the IE options/Advanced/Security.
+

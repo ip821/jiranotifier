@@ -1,0 +1,16 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {FCDE7B47-0B37-455D-BA59-C088C5E1A60F} = s 'JiraObjectsCollection Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{ACAA2068-47E3-4B71-B6E6-1AC842A6DB6A}'
+			Version = s '1.0'
+		}
+	}
+}

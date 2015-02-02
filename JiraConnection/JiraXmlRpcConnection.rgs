@@ -1,0 +1,16 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {4500EA9A-3478-4C58-AE69-4FE36F171A20} = s 'CJiraXmlRpcConnection Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{ACAA2068-47E3-4B71-B6E6-1AC842A6DB6A}'
+			Version = s '1.0'
+		}
+	}
+}
