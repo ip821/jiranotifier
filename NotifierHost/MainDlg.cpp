@@ -162,6 +162,11 @@ LRESULT CMainDlg::OnOK(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /
 	CComQIPtr<IPersistSettings> pPersistSettings = m_pSettingsControl;
 	RETURN_IF_FAILED(pPersistSettings->Save(pSettings));
 
+	CButton wndCheckButton = GetDlgItem(IDC_CHECKAUTOSTART);
+	BOOL bChecked = wndCheckButton.GetCheck();
+	CAutostartManager::SetAutostart(bChecked);
+	RETURN_IF_FAILED(pSettings->SetVariantValue(KEY_AUTOSTART, &CComVariant(bChecked)));
+
 	RETURN_IF_FAILED(InitializePlugins());
 
 	BOOL bResult = FALSE;
@@ -219,6 +224,14 @@ STDMETHODIMP CMainDlg::ShowWindow(int cmd, BOOL* bResult)
 		RETURN_IF_FAILED(m_pSettingsFactory->CreateSettings(&pSettings));
 		CComQIPtr<IPersistSettings> pPersistSettings = m_pSettingsControl;
 		RETURN_IF_FAILED(pPersistSettings->Load(pSettings));
+
+		CButton wndCheckButton = GetDlgItem(IDC_CHECKAUTOSTART);
+		CComVariant vChecked;
+		RETURN_IF_FAILED(pSettings->GetVariantValue(KEY_AUTOSTART, &vChecked));
+		if (vChecked.vt == VT_I4)
+		{
+			wndCheckButton.SetCheck(vChecked.intVal > 0);
+		}
 	}
 		goto lbl_hide;
 		break;

@@ -69,3 +69,5 @@ extern CAppModule _Module;
 #endif
 
 void ShellExecute(LPCTSTR lpszUrl);
+
+#define KEY_AUTOSTART L"Autostart"
