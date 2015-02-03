@@ -22,6 +22,7 @@ STDMETHODIMP CTrayNotifyManager::Initialize(ISystrayWindow* pSystrayWindow)
 {
 	CHECK_E_POINTER(pSystrayWindow);
 	m_pSystrayWindow = pSystrayWindow;
+	m_pSystrayWindow->SetTooltip(L"Jira notifier");
 	CComPtr<IUnknown> pUnk;
 	RETURN_IF_FAILED(QueryInterface(__uuidof(IUnknown), (LPVOID*)&pUnk));
 	AtlAdvise(m_pSystrayWindow, pUnk, __uuidof(ISystrayWindowEventSink), &dw_advice);

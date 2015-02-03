@@ -80,6 +80,10 @@ STDMETHODIMP CUpdateViewService::OnRun(IVariantObject* pResult)
 STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 {
 	CHECK_E_POINTER(pResult);
+
+	m_strLastCaption.Empty();
+	m_strLastMessage.Empty();
+
 	RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNormalIcon());
 
 	CComVariant vHr;
@@ -99,6 +103,9 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 			CString strCaption;
 			strCaption.LoadString(IDS_CAPTIONCHANGES);
 			RETURN_IF_FAILED(m_pTrayNotifyManager->ShowBaloon(strMessage, strCaption, SystrayBalloonStyle::Info, INFINITE));
+
+			m_strLastCaption = strCaption;
+			m_strLastMessage = strMessage;
 		}
 	}
 	else
@@ -120,6 +127,8 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 		CString strCaption;
 		strCaption.LoadString(IDS_CAPTIONUPDATE);
 		m_pTrayNotifyManager->ShowBaloon(strMessage, strCaption, SystrayBalloonStyle::Warning, 10);
+		m_strLastCaption = strCaption;
+		m_strLastMessage = strMessage;
 	}
 
 	return S_OK;
@@ -127,6 +136,11 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 
 STDMETHODIMP CUpdateViewService::OnTrayNotification(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT lpResult, BOOL pbHandled)
 {
+	if (lParam == WM_MOUSEFIRST && !m_strLastCaption.IsEmpty() && !m_strLastMessage.IsEmpty())
+	{
+		m_pTrayNotifyManager->ShowBaloon(m_strLastMessage, m_strLastCaption, SystrayBalloonStyle::Warning, 10);
+	}
+
 	if (lParam == NIN_BALLOONUSERCLICK)
 	{
 		CComQIPtr<ICommandSupport> pCommandSupport = m_pControl;

@@ -42,6 +42,8 @@ private:
 	CComPtr<ISettings> m_pSettings;
 	DWORD m_dwAdvice = 0;
 	DWORD m_dwAdvice2 = 0;
+	CString m_strLastCaption;
+	CString m_strLastMessage;
 
 public:
 	STDMETHOD(OnInitialized)(IServiceProvider *pServiceProvider);
