@@ -190,3 +190,5 @@ $RECYCLE.BIN/
 /NotifierHost/viewmdl_contract_i.h
 /NotifierHost/viewmdl_contract_i.p
 /JiraNotify/asyncsvc_contract_i.h
+
+packages/*

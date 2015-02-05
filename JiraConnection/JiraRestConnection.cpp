@@ -70,6 +70,8 @@ STDMETHODIMP CJiraConnection::RemoteCall(std::wstring& query, web::json::value& 
 {
 	try
 	{
+		//http_client_config config;
+		//config.set_credentials(credentials(std::wstring(m_user), std::wstring(m_passwd)));
 		http_client client(query);
 		http_request req(methods::GET);
 

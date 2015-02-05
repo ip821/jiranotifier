@@ -346,7 +346,7 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Casablanca\Release\src\build\casablanca120.vcxproj">
+    <ProjectReference Include="..\Casablanca\Release\src\build\vs12\casablanca120.vcxproj">
       <Project>{1014c621-bc2d-4813-b8c1-6d83ad6f9249}</Project>
     </ProjectReference>
   </ItemGroup>

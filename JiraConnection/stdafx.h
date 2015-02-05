@@ -45,3 +45,6 @@
 
 #define STREAM_INFO _T("INFO")
 #define STREAM_DATA _T("DATA")
+
+#pragma comment(lib, "crypt32.lib")
+#pragma comment(lib, "Bcrypt.lib")
