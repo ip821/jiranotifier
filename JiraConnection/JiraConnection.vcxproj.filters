@@ -29,6 +29,9 @@
       <UniqueIdentifier>{29f93949-6f1a-4451-a066-058eb6bdfb26}</UniqueIdentifier>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="ZZZMisc\JSON">
+      <UniqueIdentifier>{e0fa4d1d-540b-433d-a3b7-155a27b412e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +63,18 @@
     </ClCompile>
     <ClCompile Include="objmdl_contract_i.c">
       <Filter>ZZZMisc\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\model-libs\json\src\JSON.cpp">
+      <Filter>ZZZMisc\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\model-libs\json\src\JSONValue.cpp">
+      <Filter>ZZZMisc\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\model-libs\json\src\urlencode.cpp">
+      <Filter>ZZZMisc\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\model-libs\json\src\base64.cpp">
+      <Filter>ZZZMisc\JSON</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +119,15 @@
     </ClInclude>
     <ClInclude Include="objmdl_contract_i.h">
       <Filter>ZZZMisc\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\model-libs\json\src\JSON.h">
+      <Filter>ZZZMisc\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\model-libs\json\src\JSONValue.h">
+      <Filter>ZZZMisc\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\model-libs\json\src\urlencode.h">
+      <Filter>ZZZMisc\JSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

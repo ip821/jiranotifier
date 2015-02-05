@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "JiraRestConnection.h"
+#include "..\model-libs\objmdl\StringUtils.h"
 
 void CJiraConnection::InitStoredValuesMap()
 {
@@ -51,78 +52,137 @@ STDMETHODIMP CJiraConnection::CloseConnection()
 	return S_OK;
 }
 
-void CJiraConnection::CopyToStringMap(web::json::object& source, std::map<std::wstring, std::wstring>& dest)
+void CJiraConnection::CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest)
 {
 	for(auto it = source.begin(); it != source.end(); it++)
 	{
-		if(it->second.type() != web::json::value::value_type::String)
+		if(!it->second->IsString())
 			continue;
 
 		std::wstring key = it->first;
 		if(m_supportedValues.find(key) == m_supportedValues.end())
 			continue;
-		std::wstring val = it->second.as_string();
+		std::wstring val = it->second->AsString();
 		dest[key] = val;
 	}
 }
 
-STDMETHODIMP CJiraConnection::RemoteCall(std::wstring& query, web::json::value& value)
+int CJiraConnection::CurlCallback(char* data, size_t size, size_t nmemb, CJiraConnection* pObj)
 {
-	try
+	if (pObj && data)
 	{
-		//http_client_config config;
-		//config.set_credentials(credentials(std::wstring(m_user), std::wstring(m_passwd)));
-		http_client client(query);
-		http_request req(methods::GET);
+		/* Save http response in twitcurl object's buffer */
+		return pObj->SaveLastWebResponse(data, (size*nmemb));
+	}
+	return 0;
+}
 
-		USES_CONVERSION;
-		std::string str(CString(W2A(m_user)) + ":" + W2A(m_passwd));
-		std::vector<unsigned char> vec(str.cbegin(), str.cend());
-		req.headers().add(L"Authorization", L"Basic " + conversions::to_base64(vec));
+int CJiraConnection::SaveLastWebResponse(char*& data, size_t size)
+{
+	if (data && size)
+	{
+		/* Append data in our internal buffer */
+		m_callbackData.append(data, size);
+		return (int)size;
+	}
+	return 0;
+}
 
-		CString strErrorMessage;
-		client
-			.request(req)
-			.then([&](http_response response)
+STDMETHODIMP CJiraConnection::RemoteCall(string& query)
+{
+	m_callbackData.clear();
+
+	CURL* curl = curl_easy_init();
+	if (!curl)
+		return E_FAIL;
+
+	char errorBuffer[1024] = { 0 };
+
+	USES_CONVERSION;
+
+	curl_easy_setopt(curl, CURLOPT_URL, query.c_str());
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(curl, CURLOPT_HTTPPROXYTUNNEL, 1);
+	curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, NULL);
+	curl_easy_setopt(curl, CURLOPT_PROXYAUTH, (long)CURLAUTH_ANY);
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errorBuffer);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlCallback);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
+	curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, NULL);
+	curl_easy_setopt(curl, CURLOPT_ENCODING, "");
+	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+
+	std::string str(CString(W2A(m_user)) + ":" + W2A(m_passwd));
+	std::vector<unsigned char> vec(str.cbegin(), str.cend());
+
+	struct curl_slist* pHeaderList = NULL;
+	pHeaderList = curl_slist_append(pHeaderList, string("Authorization: Basic " + base64_encode((const unsigned char*)str.c_str(), str.size())).c_str());
+	curl_slist_append(pHeaderList, "User-Agent: Jira Notifier");
+
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, pHeaderList);
+
+	{
+		WINHTTP_CURRENT_USER_IE_PROXY_CONFIG proxyConfig = { 0 };
+		if (WinHttpGetIEProxyConfigForCurrentUser(&proxyConfig))
 		{
-			USES_CONVERSION;
-			if (response.status_code() == status_codes::OK)
+			std::vector<CString> proxies;
+			StrSplit(proxyConfig.lpszProxy, L";", proxies);
+			for (auto it = proxies.begin(); it != proxies.end(); it++)
 			{
-				value = response.extract_json().get();
+				std::vector<CString> values;
+				StrSplit(*it, L"=", values);
+				if (values.size() == 2 && values[0] == L"http")
+				{
+					string strValue = (CW2A(values[1]));
+					curl_easy_setopt(curl, CURLOPT_PROXY, strValue.c_str());
+					break;
+				}
 			}
-			else
-			{
-				strErrorMessage = response.reason_phrase().c_str();
-				auto data = response.extract_vector().get(); //due to bug in the casablanca i have to read the data anyway... check works in release!
-			}
-		})
-			.wait();
-
-		if (!strErrorMessage.IsEmpty())
-		{
-			m_strLastErrorMsg = strErrorMessage;
-			SetErrorInfo(0, this);
-			return E_CALL_FAILED;
+			if (proxyConfig.lpszAutoConfigUrl)
+				GlobalFree(proxyConfig.lpszAutoConfigUrl);
+			if (proxyConfig.lpszProxy)
+				GlobalFree(proxyConfig.lpszProxy);
+			if (proxyConfig.lpszProxyBypass)
+				GlobalFree(proxyConfig.lpszProxyBypass);
 		}
 	}
-	catch (const http_exception& ex)
+
+	auto res = curl_easy_perform(curl);
+	long http_code = 0;
+	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+	HRESULT curlHr = S_OK;
+	
+	if (curlHr == S_OK)
 	{
-		auto errCode = ex.error_code();
-		auto errCodeValue = errCode.value();
-		if (errCodeValue)
+		switch (res)
 		{
-			m_strLastErrorMsg = CA2W(ex.error_code().message().c_str());
+		case CURLE_COULDNT_CONNECT:
+			curlHr = HRESULT_FROM_WIN32(ERROR_NETWORK_UNREACHABLE);
 		}
-		else
-		{
-			m_strLastErrorMsg = CA2W(ex.what());
-		}
-		SetErrorInfo(0, this);
-		return E_CALL_FAILED;
 	}
-	catch (const std::exception& ex)
+
+	if (curlHr == S_OK)
 	{
-		m_strLastErrorMsg = CA2W(ex.what());
+		switch (http_code)
+		{
+		case 401:
+			curlHr = HRESULT_FROM_WIN32(COMADMIN_E_USERPASSWDNOTVALID);
+		}
+	}
+
+	if (pHeaderList)
+	{
+		curl_slist_free_all(pHeaderList);
+	}
+
+	curl_easy_cleanup(curl);
+
+	if (FAILED(curlHr))
+	{
+		m_strLastErrorMsg = _com_error(curlHr).ErrorMessage();
 		SetErrorInfo(0, this);
 		return E_CALL_FAILED;
 	}
@@ -135,11 +195,15 @@ STDMETHODIMP CJiraConnection::GetCurrentUser(IJiraObject** ppObject)
 	if (ppObject == NULL)
 		return E_POINTER;
 
-	web::json::value value;
-	RETURN_IF_FAILED(RemoteCall(m_strUri + L"/2/myself", value));
+	USES_CONVERSION;
+
+	string strUrl(W2A(m_strUri.c_str()));
+	auto strFull(strUrl + string("/2/myself"));
+	RETURN_IF_FAILED(RemoteCall(strFull));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
 	
 	std::map<std::wstring, std::wstring> valueMap;
-	CopyToStringMap(value.as_object(), valueMap);
+	CopyToStringMap(value->AsObject(), valueMap);
 
 	CComObject<CJiraObject>* pJiraObjectClass;
 	RETURN_IF_FAILED(CComObject<CJiraObject>::CreateInstance(&pJiraObjectClass));
@@ -159,34 +223,42 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 	if (!strFields.IsEmpty())
 		strFields = strFields.Left(strFields.GetLength() - 1);
 
-	uri_builder builder(m_strUri);
-	builder.append_path(L"/2/search");
-	builder.append_query(L"fields", std::wstring(strFields));
-	builder.append_query(L"jql", searchQuery);
-	web::json::value value;
-	RETURN_IF_FAILED(RemoteCall(builder.to_string(), value));
+	USES_CONVERSION;
+	string strUrl(W2A(m_strUri.c_str()));
+	strUrl += string("/2/search");
+	string strFieldsValue(W2A(strFields));
+	strUrl += string("?fields=") + urlencode(strFieldsValue);
+	string searchQueryValue(W2A(searchQuery.c_str()));
+	strUrl += string("&jql=") + urlencode(searchQueryValue);
+	RETURN_IF_FAILED(RemoteCall(strUrl));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
 
-	auto issues = value.as_object()[L"issues"].as_array();
+	auto obj = value->AsObject();
+	auto issuesObject = obj[L"issues"];
+	JSONArray issues = issuesObject->AsArray();
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
 	CComPtr<IObjCollection> pCollection;
 	RETURN_IF_FAILED(pCollectionClass->QueryInterface(&pCollection));
 
-	for (auto it = issues.begin(); it != issues.end(); it++)
+	for (size_t it = 0; it < issues.size(); it++)
 	{
 		std::map<std::wstring, std::wstring> valueMap;
-		web::json::object& issue = it->as_object();
+		auto issue = issues[it]->AsObject();
 		CopyToStringMap(issue, valueMap);
-		valueMap[(BSTR)JF_SUMMARY] = issue[L"fields"][L"summary"].as_string();
-		valueMap[(BSTR)JF_STATUS] = issue[L"fields"][L"status"][L"name"].as_string();
-		valueMap[(BSTR)JF_PRIORITY] = issue[L"fields"][L"priority"][L"name"].as_string();
-		auto resolutionDate = issue[L"fields"][L"resolutiondate"];
-		if (resolutionDate.is_null())
+		auto fieldsObject = issue[L"fields"]->AsObject();
+		valueMap[(BSTR)JF_SUMMARY] = fieldsObject[L"summary"]->AsString();
+		auto status = fieldsObject[L"status"]->AsObject();
+		valueMap[(BSTR)JF_STATUS] = status[L"name"]->AsString();
+		auto priority = fieldsObject[L"priority"]->AsObject();
+		valueMap[(BSTR)JF_PRIORITY] = priority[L"name"]->AsString();
+		auto resolutionDate = fieldsObject[L"resolutiondate"];
+		if (resolutionDate->IsNull())
 			valueMap[(BSTR)JF_RESOLUTIONDATE] = L"";
 		else
 		{
-			auto resolutionDateStr = resolutionDate.as_string();
+			auto resolutionDateStr = resolutionDate->AsString();
 			int day, month, year;
 			swscanf(
 				resolutionDateStr.c_str(),
@@ -217,19 +289,22 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 	if(ppCollection == NULL)
 		return E_POINTER;
 
-	web::json::value value;
-	RETURN_IF_FAILED(RemoteCall(m_strUri + L"/2/filter/favourite", value));
+	USES_CONVERSION;
+
+	string strUrl(W2A(m_strUri.c_str()));
+	RETURN_IF_FAILED(RemoteCall(strUrl + string("/2/filter/favourite")));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
 	CComPtr<IObjCollection> pCollection;
 	RETURN_IF_FAILED(pCollectionClass->QueryInterface(&pCollection));
 
-	auto filters = value.as_array();
-	for(auto it = filters.begin(); it != filters.end(); it++)
+	auto filters = value->AsArray();
+	for(size_t it = 0; it < filters.size(); it++)
 	{
 		std::map<std::wstring, std::wstring> valueMap;
-		CopyToStringMap(it->as_object(), valueMap);
+		CopyToStringMap(filters[it]->AsObject(), valueMap);
 
 		CComObject<CJiraObject>* pJiraObjectClass;
 		RETURN_IF_FAILED(CComObject<CJiraObject>::CreateInstance(&pJiraObjectClass));

@@ -6,12 +6,7 @@
 #include "JiraObjectsCollection.h"
 #include "JiraObject.h"
 
-#include <cpprest/http_client.h>
-
 using namespace ATL;
-using namespace utility;
-using namespace web::http;
-using namespace web::http::client;
 
 #define E_CALL_FAILED E_FAIL
 
@@ -42,10 +37,13 @@ private:
 	CString m_passwd;
 	CString m_strLastErrorMsg;
 	std::set<std::wstring> m_supportedValues;
+	std::string m_callbackData;
 
-	void CopyToStringMap(web::json::object& source, std::map<std::wstring, std::wstring>& dest);
+	void CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest);
 	void InitStoredValuesMap();
-	STDMETHOD(RemoteCall)(std::wstring& query, web::json::value& value);
+	STDMETHOD(RemoteCall)(string& query);
+	static int CurlCallback(char* data, size_t size, size_t nmemb, CJiraConnection* pObj);
+	int SaveLastWebResponse(char*& data, size_t size);
 
 public:
 

@@ -33,6 +33,13 @@
 #include <iterator>
 #include <vector>
 #include <set>
+#include <iostream>
+#include <memory>
+#include <string>
+
+#include <curl/curl.h>
+#include <curl/easy.h>
+#include <Winhttp.h>
 
 #include "JiraFields.h"
 #include "JiraMethods.h"
@@ -46,5 +53,12 @@
 #define STREAM_INFO _T("INFO")
 #define STREAM_DATA _T("DATA")
 
-#pragma comment(lib, "crypt32.lib")
-#pragma comment(lib, "Bcrypt.lib")
+#include "..\model-libs\json\src\JSON.h"
+#include "..\model-libs\json\src\JSONValue.h"
+#include "..\model-libs\json\src\urlencode.h"
+#include "..\model-libs\json\src\base64.h"
+
+using namespace std;
+
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "wldap32.lib")
