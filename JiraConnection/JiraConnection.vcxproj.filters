@@ -76,6 +76,9 @@
     <ClCompile Include="..\model-libs\json\src\base64.cpp">
       <Filter>ZZZMisc\JSON</Filter>
     </ClCompile>
+    <ClCompile Include="CurlConnection.cpp">
+      <Filter>JiraRestConnection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="..\model-libs\json\src\urlencode.h">
       <Filter>ZZZMisc\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="CurlConnection.h">
+      <Filter>JiraRestConnection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

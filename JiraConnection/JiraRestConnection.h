@@ -5,6 +5,7 @@
 #include "JiraConnection_i.h"
 #include "JiraObjectsCollection.h"
 #include "JiraObject.h"
+#include "CurlConnection.h"
 
 using namespace ATL;
 
@@ -32,18 +33,16 @@ public:
 	END_COM_MAP()
 
 private:
-	std::wstring m_strUri;
-	CString m_user;
-	CString m_passwd;
+	string m_user;
+	string m_passwd;
 	CString m_strLastErrorMsg;
 	std::set<std::wstring> m_supportedValues;
-	std::string m_callbackData;
+	CCurlConnection m_curlConnection;
+	string m_strUri;
 
 	void CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest);
 	void InitStoredValuesMap();
-	STDMETHOD(RemoteCall)(string& query);
-	static int CurlCallback(char* data, size_t size, size_t nmemb, CJiraConnection* pObj);
-	int SaveLastWebResponse(char*& data, size_t size);
+	STDMETHOD(RemoteCall)(string& strQuery, string& strResult);
 
 public:
 

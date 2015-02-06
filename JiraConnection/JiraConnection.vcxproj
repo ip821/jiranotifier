@@ -262,6 +262,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CurlConnection.cpp" />
     <ClCompile Include="objmdl_contract_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -320,6 +321,7 @@
     <ClInclude Include="..\model-libs\json\src\JSON.h" />
     <ClInclude Include="..\model-libs\json\src\JSONValue.h" />
     <ClInclude Include="..\model-libs\json\src\urlencode.h" />
+    <ClInclude Include="CurlConnection.h" />
     <ClInclude Include="objmdl_contract_i.h" />
     <ClInclude Include="JiraConnection_contract_i.h" />
     <ClInclude Include="JiraFields.h" />

@@ -27,7 +27,7 @@ STDMETHODIMP CJiraConnection::OpenConnection(BSTR bstrUri)
 		strRpcUri += '/';
 	}
 	strRpcUri += _T("rest/api");
-	m_strUri = strRpcUri;
+	m_strUri = CW2A(strRpcUri);
 	return S_OK;
 }
 
@@ -36,8 +36,8 @@ STDMETHODIMP CJiraConnection::Login(BSTR bstrUser, BSTR bstrPwd)
 	if(bstrUser == NULL || bstrPwd == NULL)
 		return COMADMIN_E_USERPASSWDNOTVALID;
 
-	m_user = bstrUser;
-	m_passwd = bstrPwd;
+	m_user = CW2A(bstrUser);
+	m_passwd = CW2A(bstrPwd);
 
 	return S_OK;
 }
@@ -52,137 +52,28 @@ STDMETHODIMP CJiraConnection::CloseConnection()
 	return S_OK;
 }
 
-void CJiraConnection::CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest)
+void CJiraConnection::CopyToStringMap(const JSONObject& source, map<wstring, wstring>& dest)
 {
 	for(auto it = source.begin(); it != source.end(); it++)
 	{
 		if(!it->second->IsString())
 			continue;
 
-		std::wstring key = it->first;
+		wstring key = it->first;
 		if(m_supportedValues.find(key) == m_supportedValues.end())
 			continue;
-		std::wstring val = it->second->AsString();
+		wstring val = it->second->AsString();
 		dest[key] = val;
 	}
 }
 
-int CJiraConnection::CurlCallback(char* data, size_t size, size_t nmemb, CJiraConnection* pObj)
+STDMETHODIMP CJiraConnection::RemoteCall(string& strQuery, string& strResult)
 {
-	if (pObj && data)
+	auto hr = m_curlConnection.RemoteCall(strQuery, m_user, m_passwd, strResult);
+
+	if (FAILED(hr))
 	{
-		/* Save http response in twitcurl object's buffer */
-		return pObj->SaveLastWebResponse(data, (size*nmemb));
-	}
-	return 0;
-}
-
-int CJiraConnection::SaveLastWebResponse(char*& data, size_t size)
-{
-	if (data && size)
-	{
-		/* Append data in our internal buffer */
-		m_callbackData.append(data, size);
-		return (int)size;
-	}
-	return 0;
-}
-
-STDMETHODIMP CJiraConnection::RemoteCall(string& query)
-{
-	m_callbackData.clear();
-
-	CURL* curl = curl_easy_init();
-	if (!curl)
-		return E_FAIL;
-
-	char errorBuffer[1024] = { 0 };
-
-	USES_CONVERSION;
-
-	curl_easy_setopt(curl, CURLOPT_URL, query.c_str());
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_easy_setopt(curl, CURLOPT_HTTPPROXYTUNNEL, 1);
-	curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, NULL);
-	curl_easy_setopt(curl, CURLOPT_PROXYAUTH, (long)CURLAUTH_ANY);
-	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errorBuffer);
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlCallback);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
-	curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, NULL);
-	curl_easy_setopt(curl, CURLOPT_ENCODING, "");
-	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
-
-	std::string str(CString(W2A(m_user)) + ":" + W2A(m_passwd));
-	std::vector<unsigned char> vec(str.cbegin(), str.cend());
-
-	struct curl_slist* pHeaderList = NULL;
-	pHeaderList = curl_slist_append(pHeaderList, string("Authorization: Basic " + base64_encode((const unsigned char*)str.c_str(), str.size())).c_str());
-	curl_slist_append(pHeaderList, "User-Agent: Jira Notifier");
-
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, pHeaderList);
-
-	{
-		WINHTTP_CURRENT_USER_IE_PROXY_CONFIG proxyConfig = { 0 };
-		if (WinHttpGetIEProxyConfigForCurrentUser(&proxyConfig))
-		{
-			std::vector<CString> proxies;
-			StrSplit(proxyConfig.lpszProxy, L";", proxies);
-			for (auto it = proxies.begin(); it != proxies.end(); it++)
-			{
-				std::vector<CString> values;
-				StrSplit(*it, L"=", values);
-				if (values.size() == 2 && values[0] == L"http")
-				{
-					string strValue = (CW2A(values[1]));
-					curl_easy_setopt(curl, CURLOPT_PROXY, strValue.c_str());
-					break;
-				}
-			}
-			if (proxyConfig.lpszAutoConfigUrl)
-				GlobalFree(proxyConfig.lpszAutoConfigUrl);
-			if (proxyConfig.lpszProxy)
-				GlobalFree(proxyConfig.lpszProxy);
-			if (proxyConfig.lpszProxyBypass)
-				GlobalFree(proxyConfig.lpszProxyBypass);
-		}
-	}
-
-	auto res = curl_easy_perform(curl);
-	long http_code = 0;
-	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-	HRESULT curlHr = S_OK;
-	
-	if (curlHr == S_OK)
-	{
-		switch (res)
-		{
-		case CURLE_COULDNT_CONNECT:
-			curlHr = HRESULT_FROM_WIN32(ERROR_NETWORK_UNREACHABLE);
-		}
-	}
-
-	if (curlHr == S_OK)
-	{
-		switch (http_code)
-		{
-		case 401:
-			curlHr = HRESULT_FROM_WIN32(COMADMIN_E_USERPASSWDNOTVALID);
-		}
-	}
-
-	if (pHeaderList)
-	{
-		curl_slist_free_all(pHeaderList);
-	}
-
-	curl_easy_cleanup(curl);
-
-	if (FAILED(curlHr))
-	{
-		m_strLastErrorMsg = _com_error(curlHr).ErrorMessage();
+		m_strLastErrorMsg = _com_error(hr).ErrorMessage();
 		SetErrorInfo(0, this);
 		return E_CALL_FAILED;
 	}
@@ -197,12 +88,12 @@ STDMETHODIMP CJiraConnection::GetCurrentUser(IJiraObject** ppObject)
 
 	USES_CONVERSION;
 
-	string strUrl(W2A(m_strUri.c_str()));
-	auto strFull(strUrl + string("/2/myself"));
-	RETURN_IF_FAILED(RemoteCall(strFull));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
+	string strUrl(m_strUri + string("/2/myself"));
+	string strResult;
+	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
 	
-	std::map<std::wstring, std::wstring> valueMap;
+	map<wstring, wstring> valueMap;
 	CopyToStringMap(value->AsObject(), valueMap);
 
 	CComObject<CJiraObject>* pJiraObjectClass;
@@ -213,7 +104,7 @@ STDMETHODIMP CJiraConnection::GetCurrentUser(IJiraObject** ppObject)
 
 STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJiraObjectsCollection** ppCollection)
 {
-	std::wstring searchQuery = bstrSearchCriteria;
+	wstring searchQuery = bstrSearchCriteria;
 
 	CString strFields;
 	for (auto& item : m_supportedValues)
@@ -224,38 +115,43 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 		strFields = strFields.Left(strFields.GetLength() - 1);
 
 	USES_CONVERSION;
-	string strUrl(W2A(m_strUri.c_str()));
+	string strUrl(m_strUri);
 	strUrl += string("/2/search");
-	string strFieldsValue(W2A(strFields));
-	strUrl += string("?fields=") + urlencode(strFieldsValue);
-	string searchQueryValue(W2A(searchQuery.c_str()));
-	strUrl += string("&jql=") + urlencode(searchQueryValue);
-	RETURN_IF_FAILED(RemoteCall(strUrl));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
 
-	auto obj = value->AsObject();
-	auto issuesObject = obj[L"issues"];
-	JSONArray issues = issuesObject->AsArray();
+	auto strFieldsA = string(CW2A(strFields));
+	strUrl += string("?fields=") + urlencode(strFieldsA);
+
+	string searchQueryA(CW2A(searchQuery.c_str()));
+	strUrl += string("&jql=") + urlencode(searchQueryA);
+
+	string strResult;
+	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+
+	auto valueObject = value->AsObject();
+	auto issues = valueObject[L"issues"]->AsArray();
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
 	CComPtr<IObjCollection> pCollection;
 	RETURN_IF_FAILED(pCollectionClass->QueryInterface(&pCollection));
 
-	for (size_t it = 0; it < issues.size(); it++)
+	for (size_t i = 0; i < issues.size(); i++)
 	{
-		std::map<std::wstring, std::wstring> valueMap;
-		auto issue = issues[it]->AsObject();
+		auto issue = issues[i]->AsObject();
+		
+		map<wstring, wstring> valueMap;
 		CopyToStringMap(issue, valueMap);
+
 		auto fieldsObject = issue[L"fields"]->AsObject();
-		valueMap[(BSTR)JF_SUMMARY] = fieldsObject[L"summary"]->AsString();
+		valueMap[JF_SUMMARY] = fieldsObject[L"summary"]->AsString();
 		auto status = fieldsObject[L"status"]->AsObject();
-		valueMap[(BSTR)JF_STATUS] = status[L"name"]->AsString();
+		valueMap[JF_STATUS] = status[L"name"]->AsString();
 		auto priority = fieldsObject[L"priority"]->AsObject();
-		valueMap[(BSTR)JF_PRIORITY] = priority[L"name"]->AsString();
+		valueMap[JF_PRIORITY] = priority[L"name"]->AsString();
 		auto resolutionDate = fieldsObject[L"resolutiondate"];
 		if (resolutionDate->IsNull())
-			valueMap[(BSTR)JF_RESOLUTIONDATE] = L"";
+			valueMap[JF_RESOLUTIONDATE] = L"";
 		else
 		{
 			auto resolutionDateStr = resolutionDate->AsString();
@@ -269,7 +165,7 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 				);
 			CString strFormat;
 			strFormat.Format(L"%04d-%02d-%02d", year, month, day);
-			valueMap[(BSTR)JF_RESOLUTIONDATE] = strFormat;
+			valueMap[JF_RESOLUTIONDATE] = strFormat;
 		}
 
 		CComObject<CJiraObject>* pJiraObjectClass;
@@ -291,9 +187,10 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 
 	USES_CONVERSION;
 
-	string strUrl(W2A(m_strUri.c_str()));
-	RETURN_IF_FAILED(RemoteCall(strUrl + string("/2/filter/favourite")));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(m_callbackData.c_str()));
+	string strUrl(m_strUri + string("/2/filter/favourite"));
+	string strResult;
+	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
@@ -303,7 +200,7 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 	auto filters = value->AsArray();
 	for(size_t it = 0; it < filters.size(); it++)
 	{
-		std::map<std::wstring, std::wstring> valueMap;
+		map<wstring, wstring> valueMap;
 		CopyToStringMap(filters[it]->AsObject(), valueMap);
 
 		CComObject<CJiraObject>* pJiraObjectClass;
