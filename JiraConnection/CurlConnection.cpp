@@ -109,7 +109,6 @@ int CCurlConnection::CurlCallback(char* data, size_t size, size_t nmemb, CCurlCo
 {
 	if (pObj && data)
 	{
-		/* Save http response in twitcurl object's buffer */
 		return pObj->SaveLastWebResponse(data, (size*nmemb));
 	}
 	return 0;
@@ -119,7 +118,6 @@ int CCurlConnection::SaveLastWebResponse(char*& data, size_t size)
 {
 	if (data && size)
 	{
-		/* Append data in our internal buffer */
 		m_callbackData.append(data, size);
 		return (int)size;
 	}
