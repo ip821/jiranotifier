@@ -56,5 +56,9 @@
 #define KEY_PASSWORD L"Password"
 #define KEY_HAS_CHANGES L"HasChanges"
 #define KEY_HAS_MESSAGE L"HasMessage"
+#define KEY_ISSUES L"Issues"
 
 using namespace IP;
+
+#define FILTER_ASSIGNED_TO_ME L"assignee = currentUser() AND status in(Open, \"In Progress\", Reopened) ORDER BY priority DESC, key DESC"
+#define FILTER_ASSIGNED_TO_ME_NAME L"Assigned to me"

@@ -40,9 +40,7 @@ STDMETHODIMP COpenJiraCommand::InstallMenu(IMenu* pMenu)
 
 STDMETHODIMP COpenJiraCommand::Invoke(REFGUID guidCommand)
 {
-	CComPtr<ITrayNotifyManager> pTrayNotifyManager;
-	RETURN_IF_FAILED(m_pUpdateViewService->GetTrayNotifyManager(&pTrayNotifyManager));
-	RETURN_IF_FAILED(pTrayNotifyManager->ResetIconToNormalIfPossible());
+	RETURN_IF_FAILED(m_pUpdateViewService->ResetIcon());
 	CComVariant vServer;
 	if (SUCCEEDED(m_pSettings->GetVariantValue(KEY_SERVER, &vServer)) && vServer.vt == VT_BSTR)
 	{

@@ -106,6 +106,13 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 
 			m_strLastCaption = strCaption;
 			m_strLastMessage = strMessage;
+
+			CComVariant vServerIssues;
+			RETURN_IF_FAILED(pResult->GetVariantValue(KEY_ISSUES, &vServerIssues));
+			if (vServerIssues.vt == VT_UNKNOWN)
+			{
+				m_pJiraObjectsCollection = vServerIssues.punkVal;
+			}
 		}
 	}
 	else
@@ -155,5 +162,28 @@ STDMETHODIMP CUpdateViewService::Load(ISettings *pSettings)
 {
 	CHECK_E_POINTER(pSettings);
 	m_pSettings = pSettings;
+	return S_OK;
+}
+
+STDMETHODIMP CUpdateViewService::ResetIcon()
+{
+	if (m_pJiraObjectsCollection)
+	{
+		CComPtr<IObjectStorageManager> pObjectStorageManager;
+		RETURN_IF_FAILED(HrCoCreateInstance(CLSID_ObjectStorageManager, &pObjectStorageManager));
+
+		CComPtr<IObjectStorage> pObjectStorage;
+		RETURN_IF_FAILED(pObjectStorageManager->OpenObjectStorage(_T("Issues"), TRUE, &pObjectStorage));
+
+		CComPtr<IStorage> pStorage;
+		RETURN_IF_FAILED(pObjectStorage->OpenStorage(FILTER_ASSIGNED_TO_ME_NAME, TRUE, &pStorage));
+
+		CComQIPtr<IPersistStorage> pPersistStorage = m_pJiraObjectsCollection;
+		RETURN_IF_FAILED(pPersistStorage->Save(pStorage, FALSE));
+
+		m_pJiraObjectsCollection.Release();
+	}
+	RETURN_IF_FAILED(m_pTrayNotifyManager->ResetIconToNormalIfPossible());
+
 	return S_OK;
 }

@@ -5,9 +5,6 @@
 #include "..\JiraConnection\Plugins.h"
 #include "..\JiraConnection\JiraFields.h"
 
-#define FILTER_ASSIGNED_TO_ME L"assignee = currentUser() AND status in(Open, \"In Progress\", Reopened) ORDER BY priority DESC, key DESC"
-#define FILTER_ASSIGNED_TO_ME_NAME L"Assigned to me"
-
 // CUpdateIssueService
 
 STDMETHODIMP CUpdateIssueService::Load(ISettings *pSettings)
@@ -114,12 +111,12 @@ STDMETHODIMP CUpdateIssueService::OnRun(IVariantObject* pResult)
 		}
 	}
 
-	{ //Write
-		CComPtr<IStorage> pStorage;
-		RETURN_IF_FAILED(pObjectStorage->OpenStorage(FILTER_ASSIGNED_TO_ME_NAME, TRUE, &pStorage));
+	CComVariant vHasChanges;
+	RETURN_IF_FAILED(pResult->GetVariantValue(KEY_HAS_CHANGES, &vHasChanges));
 
-		CComQIPtr<IPersistStorage> pPersistStorage = pServerIssues;
-		RETURN_IF_FAILED(pPersistStorage->Save(pStorage, FALSE));
+	if (vHasChanges.vt == VT_BOOL && vHasChanges.boolVal)
+	{ //Write
+		RETURN_IF_FAILED(pResult->SetVariantValue(KEY_ISSUES, &CComVariant(pServerIssues)));
 	}
 
 	return S_OK;

@@ -44,6 +44,7 @@ private:
 	DWORD m_dwAdvice2 = 0;
 	CString m_strLastCaption;
 	CString m_strLastMessage;
+	CComQIPtr<IJiraObjectsCollection> m_pJiraObjectsCollection;
 
 public:
 	STDMETHOD(OnInitialized)(IServiceProvider *pServiceProvider);
@@ -54,6 +55,7 @@ public:
 	STDMETHOD(OnFinish)(IVariantObject* pResult);
 
 	STDMETHOD(GetTrayNotifyManager)(ITrayNotifyManager** ppTrayNotifyManager);
+	STDMETHOD(ResetIcon)();
 	STDMETHOD(OnTrayNotification)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT lResult, BOOL pbHandled);
 	STDMETHOD(Load)(ISettings *pSettings);
 };
