@@ -77,6 +77,13 @@ STDMETHODIMP CJiraConnection::RemoteCall(string& strQuery, string& strResult)
 		SetErrorInfo(0, this);
 		return E_CALL_FAILED;
 	}
+	
+	if (hr != S_OK)
+	{
+		m_strLastErrorMsg = CA2W(curl_easy_strerror(static_cast<CURLcode>(hr)));
+		SetErrorInfo(0, this);
+		return E_CALL_FAILED;
+	}
 
 	return S_OK;
 }
@@ -92,6 +99,7 @@ STDMETHODIMP CJiraConnection::GetCurrentUser(IJiraObject** ppObject)
 	string strResult;
 	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
 	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+	ATLASSERT(value);
 	
 	map<wstring, wstring> valueMap;
 	CopyToStringMap(value->AsObject(), valueMap);
@@ -127,6 +135,7 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 	string strResult;
 	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
 	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+	ATLASSERT(value);
 
 	auto valueObject = value->AsObject();
 	auto issues = valueObject[L"issues"]->AsArray();
@@ -191,6 +200,7 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 	string strResult;
 	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
 	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+	ATLASSERT(value);
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;
 	RETURN_IF_FAILED(CComObject<CJiraObjectsCollection>::CreateInstance(&pCollectionClass));
