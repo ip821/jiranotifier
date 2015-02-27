@@ -75,13 +75,14 @@ STDMETHODIMP CCurlConnection::RemoteCall(string strQuery, string strUser, string
 
 	HRESULT curlHr = S_OK;
 
-	if (curlHr == S_OK)
+	switch (res)
 	{
-		switch (res)
-		{
-		case CURLE_COULDNT_CONNECT:
-			curlHr = HRESULT_FROM_WIN32(ERROR_NETWORK_UNREACHABLE);
-		}
+	case CURLE_COULDNT_CONNECT:
+		curlHr = HRESULT_FROM_WIN32(ERROR_NETWORK_UNREACHABLE);
+		break;
+	default:
+		curlHr = res;
+		break;
 	}
 
 	if (curlHr == S_OK)
