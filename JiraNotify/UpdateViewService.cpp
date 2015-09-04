@@ -83,6 +83,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 
 	m_strLastCaption.Empty();
 	m_strLastMessage.Empty();
+	m_lastBaloonStyle = SystrayBalloonStyle::Info;
 
 	RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNormalIcon());
 
@@ -106,6 +107,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 
 			m_strLastCaption = strCaption;
 			m_strLastMessage = strMessage;
+			m_lastBaloonStyle = SystrayBalloonStyle::Info;
 
 			CComVariant vServerIssues;
 			RETURN_IF_FAILED(pResult->GetVariantValue(KEY_ISSUES, &vServerIssues));
@@ -136,6 +138,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 		m_pTrayNotifyManager->ShowBaloon(strMessage, strCaption, SystrayBalloonStyle::Warning, 10);
 		m_strLastCaption = strCaption;
 		m_strLastMessage = strMessage;
+		m_lastBaloonStyle = SystrayBalloonStyle::Warning;
 	}
 
 	return S_OK;
@@ -145,7 +148,7 @@ STDMETHODIMP CUpdateViewService::OnTrayNotification(UINT uMsg, WPARAM wParam, LP
 {
 	if (lParam == WM_MOUSEFIRST && !m_strLastCaption.IsEmpty() && !m_strLastMessage.IsEmpty())
 	{
-		m_pTrayNotifyManager->ShowBaloon(m_strLastMessage, m_strLastCaption, SystrayBalloonStyle::Warning, 10);
+		m_pTrayNotifyManager->ShowBaloon(m_strLastMessage, m_strLastCaption, m_lastBaloonStyle, 10);
 	}
 
 	if (lParam == NIN_BALLOONUSERCLICK)

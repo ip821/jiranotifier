@@ -44,6 +44,7 @@ private:
 	DWORD m_dwAdvice2 = 0;
 	CString m_strLastCaption;
 	CString m_strLastMessage;
+	SystrayBalloonStyle m_lastBaloonStyle = SystrayBalloonStyle::Info;
 	CComQIPtr<IJiraObjectsCollection> m_pJiraObjectsCollection;
 
 public:
