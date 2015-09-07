@@ -77,14 +77,19 @@ STDMETHODIMP CUpdateViewService::OnRun(IVariantObject* pResult)
 	return S_OK;
 }
 
+STDMETHODIMP CUpdateViewService::ClearLastState()
+{
+	m_strLastCaption.Empty();
+	m_strLastMessage.Empty();
+	m_lastBaloonStyle = SystrayBalloonStyle::Info;
+	return S_OK;
+}
+
 STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 {
 	CHECK_E_POINTER(pResult);
 
-	m_strLastCaption.Empty();
-	m_strLastMessage.Empty();
-	m_lastBaloonStyle = SystrayBalloonStyle::Info;
-
+	RETURN_IF_FAILED(ClearLastState());
 	RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNormalIcon());
 
 	CComVariant vHr;
@@ -155,6 +160,8 @@ STDMETHODIMP CUpdateViewService::OnTrayNotification(UINT uMsg, WPARAM wParam, LP
 	{
 		CComQIPtr<ICommandSupport> pCommandSupport = m_pControl;
 		RETURN_IF_FAILED(pCommandSupport->QueueCommandExecution(CLSID_OpenJiraCommand, NULL));
+		if(m_lastBaloonStyle == SystrayBalloonStyle::Info)
+			RETURN_IF_FAILED(ClearLastState());
 	}
 
 	return S_OK;

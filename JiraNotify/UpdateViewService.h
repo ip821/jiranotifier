@@ -47,6 +47,8 @@ private:
 	SystrayBalloonStyle m_lastBaloonStyle = SystrayBalloonStyle::Info;
 	CComQIPtr<IJiraObjectsCollection> m_pJiraObjectsCollection;
 
+	STDMETHOD(ClearLastState)();
+
 public:
 	STDMETHOD(OnInitialized)(IServiceProvider *pServiceProvider);
 	STDMETHOD(OnShutdown)();
