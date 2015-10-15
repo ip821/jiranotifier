@@ -137,6 +137,9 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
 	ATLASSERT(value);
 
+    if (!value)
+        return HRESULT_FROM_WIN32(DNS_ERROR_INVALID_XML);
+
 	auto valueObject = value->AsObject();
 	auto issues = valueObject[L"issues"]->AsArray();
 
