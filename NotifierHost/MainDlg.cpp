@@ -46,6 +46,9 @@ LRESULT CMainDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 	CenterWindow();
 
+    CMenu sysMenu = GetSystemMenu(FALSE);
+    sysMenu.EnableMenuItem(SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
+
 	// register object for message filtering and idle updates
 	CMessageLoop* pLoop = _Module.GetMessageLoop();
 	ATLASSERT(pLoop != NULL);

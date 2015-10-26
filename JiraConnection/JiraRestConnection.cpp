@@ -135,7 +135,6 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 	string strResult;
 	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
 	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
-	ATLASSERT(value);
 
     if (!value)
         return HRESULT_FROM_WIN32(DNS_ERROR_INVALID_XML);
