@@ -156,7 +156,7 @@ STDMETHODIMP CUpdateViewService::OnTrayNotification(UINT uMsg, WPARAM wParam, LP
 		m_pTrayNotifyManager->ShowBaloon(m_strLastMessage, m_strLastCaption, m_lastBaloonStyle, 10);
 	}
 
-	if (lParam == NIN_BALLOONUSERCLICK)
+	if (lParam == NIN_BALLOONUSERCLICK && m_lastBaloonStyle == SystrayBalloonStyle::Info)
 	{
 		CComQIPtr<ICommandSupport> pCommandSupport = m_pControl;
 		RETURN_IF_FAILED(pCommandSupport->QueueCommandExecution(CLSID_OpenJiraCommand, NULL));
