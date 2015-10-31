@@ -192,3 +192,4 @@ $RECYCLE.BIN/
 /JiraNotify/asyncsvc_contract_i.h
 
 packages/*
+/NotifierHost/NotifierHost_i.h

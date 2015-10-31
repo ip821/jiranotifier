@@ -7,6 +7,7 @@
 
 #include "MainDlg.h"
 #include "ShowWindowCommand.h"
+#include "SettingsControl.h"
 
 CMainDlg::CMainDlg()
 {
@@ -86,7 +87,7 @@ LRESULT CMainDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	RETURN_IF_FAILED(m_pCommandSupport->InstallCommands(m_pPluginSupport));
 	RETURN_IF_FAILED(m_pSystrayWindow->SetMenu(m_menu));
 
-	RETURN_IF_FAILED(HrCoCreateInstance(CLSID_SettingsControl, &m_pSettingsControl));
+	RETURN_IF_FAILED(CComObject<CSettingsControl>::_CreatorClass::CreateInstance(NULL, IID_IControl, (LPVOID*)&m_pSettingsControl));
 	RETURN_IF_FAILED(InsertToGroupboxPlaceholder(m_pSettingsControl, IDC_PLACEHOLDER, FALSE));
 	return TRUE;
 }

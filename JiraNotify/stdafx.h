@@ -51,9 +51,6 @@
 #include "..\NotifierHost\Plugins.h"
 #include "..\JiraConnection\Plugins.h"
 
-#define KEY_SERVER L"Server"
-#define KEY_USER L"User"
-#define KEY_PASSWORD L"Password"
 #define KEY_HAS_CHANGES L"HasChanges"
 #define KEY_HAS_MESSAGE L"HasMessage"
 #define KEY_ISSUES L"Issues"

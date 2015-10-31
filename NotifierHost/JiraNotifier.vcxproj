@@ -138,10 +138,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="NotifierHost_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="objmdl_contract_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SettingsControl.cpp" />
     <ClCompile Include="ShowWindowCommand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -158,9 +163,12 @@
     <ClInclude Include="jiraconnection_contract_i.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="notifierhost_contract_i.h" />
+    <ClInclude Include="NotifierHost_i.h" />
     <ClInclude Include="objmdl_contract_i.h" />
     <ClInclude Include="Plugins.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SettingKeys.h" />
+    <ClInclude Include="SettingsControl.h" />
     <ClInclude Include="ShowWindowCommand.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="viewmdl_contract_i.h" />
@@ -198,6 +206,14 @@
       <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">viewmdl_contract_i.h</HeaderFileName>
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">viewmdl_contract_i.c</InterfaceIdentifierFileName>
       <ProxyFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">viewmdl_contract_i.p</ProxyFileName>
+    </Midl>
+    <Midl Include="NotifierHost.idl">
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotifierHost_i.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotifierHost_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ProxyFileName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotifierHost_i.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotifierHost_i.c</InterfaceIdentifierFileName>
     </Midl>
     <Midl Include="notifierhost_contract_i.idl">
       <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">notifierhost_contract_i.h</HeaderFileName>

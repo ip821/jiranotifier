@@ -5,11 +5,10 @@
 #pragma once
 
 #include "viewmdl_contract_i.h"
-#include "NotifierHost_contract_i.h"
+#include "NotifierHost_i.h"
 #include "..\ViewMdl\ChildDialogControl.h"
 #include "Plugins.h"
-
-DEFINE_GUID(CLSID_SettingsControl, 0x11f756d4, 0x7bd4, 0x4a51, 0xb9, 0xf1, 0x29, 0x73, 0x62, 0xe0, 0x8c, 0x1a);
+#include "SettingKeys.h"
 
 class CMainDlg : 
 	public CAxDialogImpl<CMainDlg>, 

@@ -9,7 +9,6 @@ CPluginTable::CPluginTable(void)
 HRESULT CPluginTable::FinalConstruct()
 {
 	AddObject(CLSID_ObjectStorageManager, L"Object storage manager");
-	AddObject(CLSID_SettingsControl, L"Settings control");
 	AddObject(CLSID_TrayNotifyManager, L"Tray notify manager");
 	AddObject(CLSID_SettingsFactory, L"Settings factory");
 	AddPluginInfoRemote(PNAMESP_HOSTFORM, PVIEWTYPE_NOTIFIER_SERVICE, CLSID_TimerService, CLSID_TimerService, L"Timer service");

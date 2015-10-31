@@ -35,9 +35,6 @@
     <Filter Include="TrayNotifyManager">
       <UniqueIdentifier>{d6e0b5e1-15ca-454c-80ac-2cd92055b21d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SettingsControl">
-      <UniqueIdentifier>{a7fd076c-327c-4039-be49-01ff9a03e1ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="OpenJiraCommand">
       <UniqueIdentifier>{e1a11496-7414-4d72-9817-9963dd26c138}</UniqueIdentifier>
     </Filter>
@@ -87,9 +84,6 @@
     </ClCompile>
     <ClCompile Include="TrayNotifyManager.cpp">
       <Filter>TrayNotifyManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingsControl.cpp">
-      <Filter>SettingsControl</Filter>
     </ClCompile>
     <ClCompile Include="OpenJiraCommand.cpp">
       <Filter>OpenJiraCommand</Filter>
@@ -153,9 +147,6 @@
     <ClInclude Include="TrayNotifyManager.h">
       <Filter>TrayNotifyManager</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsControl.h">
-      <Filter>SettingsControl</Filter>
-    </ClInclude>
     <ClInclude Include="OpenJiraCommand.h">
       <Filter>OpenJiraCommand</Filter>
     </ClInclude>
@@ -178,23 +169,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="JiraNotify.rgs">
-      <Filter>ZZZMisc\Resource Files</Filter>
-    </None>
     <None Include="JiraNotify.def">
       <Filter>ZZZMisc\Source Files</Filter>
-    </None>
-    <None Include="UpdateIssueService.rgs">
-      <Filter>ZZZMisc\Resource Files</Filter>
-    </None>
-    <None Include="UpdateViewService.rgs">
-      <Filter>ZZZMisc\Resource Files</Filter>
-    </None>
-    <None Include="SettingsControl.rgs">
-      <Filter>ZZZMisc\Resource Files</Filter>
-    </None>
-    <None Include="SettingsProvider.rgs">
-      <Filter>ZZZMisc\Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

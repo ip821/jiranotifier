@@ -112,13 +112,6 @@ library JiraNotifyLib
 		[default] interface IUpdateViewService;
 	};
 	[
-		uuid(11F756D4-7BD4-4A51-B9F1-297362E08C1A)
-	]
-	coclass SettingsControl
-	{
-		[default] interface IControl;
-	};
-	[
 		uuid(E422C3C7-491D-4715-A614-9ACBFD9E1B5C)
 	]
 	coclass OpenJiraCommand

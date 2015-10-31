@@ -4,6 +4,7 @@
 #include "..\ViewMdl\IInitializeWithControlImpl.h"
 #include "Plugins.h"
 #include "JiraNotify_i.h"
+#include "..\NotifierHost\SettingKeys.h"
 
 using namespace ATL;
 

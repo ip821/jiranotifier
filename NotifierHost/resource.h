@@ -24,6 +24,14 @@
 #define ID_DUMMY_EXIT                   32777
 #define ID_DUMMY_OPENJIRA               32780
 #define ID_COMMAND_OPENJIRA             32781
+#define IDC_EDITUSER                    1001
+#define IDC_EDITPASSWORD                1002
+#define IDC_EDITCHECKINTERVAL           1004
+#define IDR_SETTINGSCONTROL             108
+#define IDD_DIALOG                      201
+#define IDC_EDITSERVER                  1000
+#define IDC_STATIC1                     201
+#define IDC_STATIC2                     202
 
 // Next default values for new objects
 // 

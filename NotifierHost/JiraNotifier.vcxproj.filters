@@ -31,6 +31,9 @@
     <Filter Include="ShowWindowCommand">
       <UniqueIdentifier>{dba25a64-ce21-460d-9237-ad0c06836611}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SettingsControl">
+      <UniqueIdentifier>{a0a8ce45-d6fb-4226-93c1-964089f164eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +64,12 @@
       <Filter>ZZZMisc\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="notifierhost_contract_i.c">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsControl.cpp">
+      <Filter>SettingsControl</Filter>
+    </ClCompile>
+    <ClCompile Include="NotifierHost_i.c">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,6 +107,15 @@
     <ClInclude Include="notifierhost_contract_i.h">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="SettingsControl.h">
+      <Filter>SettingsControl</Filter>
+    </ClInclude>
+    <ClInclude Include="NotifierHost_i.h">
+      <Filter>ZZZMisc\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingKeys.h">
+      <Filter>SettingsControl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JiraNotifier.rc">
@@ -129,6 +147,9 @@
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
     <Midl Include="..\model-libs\ViewMdl\viewmdl_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="NotifierHost.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
   </ItemGroup>

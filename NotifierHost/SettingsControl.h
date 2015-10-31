@@ -2,7 +2,8 @@
 
 #pragma once
 #include "resource.h"       // main symbols
-#include "JiraNotify_i.h"
+#include "NotifierHost_i.h"
+#include "SettingKeys.h"
 
 using namespace ATL;
 

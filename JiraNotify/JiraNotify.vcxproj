@@ -155,7 +155,6 @@
     </ClCompile>
     <ClCompile Include="OpenJiraCommand.cpp" />
     <ClCompile Include="PluginTable.cpp" />
-    <ClCompile Include="SettingsControl.cpp" />
     <ClCompile Include="SettingsFactory.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -190,7 +189,6 @@
     <ClInclude Include="Plugins.h" />
     <ClInclude Include="PluginTable.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SettingsControl.h" />
     <ClInclude Include="SettingsFactory.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -208,11 +206,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="JiraNotify.def" />
-    <None Include="JiraNotify.rgs" />
-    <None Include="SettingsControl.rgs" />
-    <None Include="SettingsProvider.rgs" />
-    <None Include="UpdateIssueService.rgs" />
-    <None Include="UpdateViewService.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="..\JiraConnection\jiraconnection_contract_i.idl">
