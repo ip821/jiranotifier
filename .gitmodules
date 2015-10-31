@@ -3,5 +3,5 @@
 	url = https://github.com/ip821/model-libs.git
 
 [submodule "BaseNotifier"]
-	path = .
+	path = BaseNotifier
 	url = https://github.com/ip821/basenotifier.git

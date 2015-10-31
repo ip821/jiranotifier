@@ -71,25 +71,25 @@
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>jiraconn</TargetName>
-    <IncludePath>..\model-libs\objmdl;..\curl\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\model-libs\objmdl;..\basenotifier\curl\include;$(IncludePath)</IncludePath>
     <CodeAnalysisRuleSet>..\..\WinDbgTool\AnalyzeRuleSet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>jiraconn</TargetName>
-    <IncludePath>..\model-libs\objmdl;..\curl\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\model-libs\objmdl;..\basenotifier\curl\include;$(IncludePath)</IncludePath>
     <CodeAnalysisRuleSet>..\..\WinDbgTool\AnalyzeRuleSet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\model-libs\objmdl;..\curl\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\model-libs\objmdl;..\basenotifier\curl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\model-libs\objmdl;..\curl\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\model-libs\objmdl;..\basenotifier\curl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -375,7 +375,7 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\curl\projects\Windows\VC12\lib\libcurl.vcxproj">
+    <ProjectReference Include="..\BaseNotifier\curl\projects\Windows\VC12\lib\libcurl.vcxproj">
       <Project>{da6f56b4-06a4-441d-ad70-ac5a7d51fadb}</Project>
     </ProjectReference>
   </ItemGroup>

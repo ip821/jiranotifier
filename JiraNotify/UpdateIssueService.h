@@ -3,7 +3,7 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include "JiraNotify_i.h"
-#include "..\NotifierHost\SettingKeys.h"
+#include "..\BaseNotifier\NotifierHost\SettingKeys.h"
 
 typedef std::vector<CString> TStringVector;
 

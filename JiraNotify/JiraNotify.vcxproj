@@ -226,7 +226,7 @@
       <ProxyFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ProxyFileName>
     </Midl>
-    <Midl Include="..\NotifierHost\notifierhost_contract_i.idl">
+    <Midl Include="..\basenotifier\NotifierHost\notifierhost_contract_i.idl">
       <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">notifierhost_contract_i.h</HeaderFileName>
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">notifierhost_contract_i.c</InterfaceIdentifierFileName>
       <ProxyFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

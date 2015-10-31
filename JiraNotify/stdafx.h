@@ -48,7 +48,7 @@
 #include "..\model-libs\ViewMdl\Functions.h"
 #include "..\model-libs\asyncsvc\Plugins.h"
 #include "..\model-libs\asyncsvc\Metadata.h"
-#include "..\NotifierHost\Plugins.h"
+#include "..\BaseNotifier\NotifierHost\Plugins.h"
 #include "..\JiraConnection\Plugins.h"
 
 #define KEY_HAS_CHANGES L"HasChanges"

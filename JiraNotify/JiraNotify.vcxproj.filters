@@ -180,9 +180,6 @@
     <Midl Include="..\JiraConnection\jiraconnection_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="..\NotifierHost\notifierhost_contract_i.idl">
-      <Filter>ZZZMisc\Source Files</Filter>
-    </Midl>
     <Midl Include="..\model-libs\ViewMdl\viewmdl_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
@@ -190,6 +187,9 @@
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
     <Midl Include="..\model-libs\asyncsvc\asyncsvc_contract_i.idl">
+      <Filter>ZZZMisc\Source Files</Filter>
+    </Midl>
+    <Midl Include="..\basenotifier\NotifierHost\notifierhost_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
   </ItemGroup>
