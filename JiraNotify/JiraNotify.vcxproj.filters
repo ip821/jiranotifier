@@ -94,7 +94,7 @@
     <ClCompile Include="SettingsFactory.cpp">
       <Filter>SettingsFactory</Filter>
     </ClCompile>
-    <ClCompile Include="asyncsvc_contract_i.c">
+    <ClCompile Include="asyncmdl_contract_i.c">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -156,7 +156,7 @@
     <ClInclude Include="SettingsFactory.h">
       <Filter>SettingsFactory</Filter>
     </ClInclude>
-    <ClInclude Include="asyncsvc_contract_i.h">
+    <ClInclude Include="asyncmdl_contract_i.h">
       <Filter>ZZZMisc\Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -186,10 +186,10 @@
     <Midl Include="..\model-libs\ObjMdl\objmdl_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="..\model-libs\asyncsvc\asyncsvc_contract_i.idl">
+    <Midl Include="..\basenotifier\NotifierHost\notifierhost_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
-    <Midl Include="..\basenotifier\NotifierHost\notifierhost_contract_i.idl">
+    <Midl Include="..\model-libs\asyncmdl\asyncmdl_contract_i.idl">
       <Filter>ZZZMisc\Source Files</Filter>
     </Midl>
   </ItemGroup>

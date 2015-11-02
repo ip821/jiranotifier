@@ -46,8 +46,8 @@
 #include "..\model-libs\ObjMdl\Metadata.h"
 #include "..\model-libs\ViewMdl\Plugins.h"
 #include "..\model-libs\ViewMdl\Functions.h"
-#include "..\model-libs\asyncsvc\Plugins.h"
-#include "..\model-libs\asyncsvc\Metadata.h"
+#include "..\model-libs\asyncmdl\Plugins.h"
+#include "..\model-libs\asyncmdl\Metadata.h"
 #include "..\BaseNotifier\NotifierHost\Plugins.h"
 #include "..\JiraConnection\Plugins.h"
 
