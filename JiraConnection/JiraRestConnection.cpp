@@ -20,6 +20,8 @@ STDMETHODIMP CJiraConnection::OpenConnection(BSTR bstrUri)
 	if(bstrUri == NULL)
 		return INET_E_INVALID_URL;
 
+    RETURN_IF_FAILED(HrCoCreateInstance(CLSID_HttpConnection, &m_pHttpConnection));
+
 	CString strRpcUri = bstrUri;
 	int iLen = strRpcUri.GetLength();
 	if(iLen && strRpcUri[iLen - 1] != '/')

@@ -6,6 +6,9 @@
 #include "JiraObjectsCollection.h"
 #include "JiraObject.h"
 #include "CurlConnection.h"
+#include "netmdl_contract_i.h"
+#include "..\model-libs\netmdl\Plugins.h"
+#include "..\model-libs\netmdl\Metadata.h"
 
 using namespace ATL;
 
@@ -39,6 +42,7 @@ private:
 	std::set<std::wstring> m_supportedValues;
 	CCurlConnection m_curlConnection;
 	string m_strUri;
+    CComPtr<IHttpConnection> m_pHttpConnection;
 
 	void CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest);
 	void InitStoredValuesMap();

@@ -8,6 +8,7 @@ import "oaidl.idl";
 import "ocidl.idl";
 import "..\model-libs\objmdl\objmdl_contract_i.idl";
 import "jiraconnection_contract_i.idl";
+import "..\model-libs\netmdl\netmdl_contract_i.idl";
 
 [
 	uuid(ACAA2068-47E3-4B71-B6E6-1AC842A6DB6A),

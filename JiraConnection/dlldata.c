@@ -21,6 +21,7 @@ extern "C"   {
 
 EXTERN_PROXY_FILE( JiraConnection )
 EXTERN_PROXY_FILE( jiraconnection_contract_i )
+EXTERN_PROXY_FILE( netmdl_contract_i )
 EXTERN_PROXY_FILE( objmdl_contract_i )
 
 
@@ -28,6 +29,7 @@ PROXYFILE_LIST_START
 /* Start of list */
   REFERENCE_PROXY_FILE( JiraConnection ),
   REFERENCE_PROXY_FILE( jiraconnection_contract_i ),
+  REFERENCE_PROXY_FILE( netmdl_contract_i ),
   REFERENCE_PROXY_FILE( objmdl_contract_i ),
 /* End of list */
 PROXYFILE_LIST_END

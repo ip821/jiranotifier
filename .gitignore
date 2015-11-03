@@ -194,3 +194,4 @@ $RECYCLE.BIN/
 packages/*
 /NotifierHost/NotifierHost_i.h
 /JiraNotify/asyncmdl_contract_i.h
+/JiraConnection/netmdl_contract_i.h
