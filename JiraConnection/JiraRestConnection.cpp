@@ -29,7 +29,7 @@ STDMETHODIMP CJiraConnection::OpenConnection(BSTR bstrUri)
 		strRpcUri += '/';
 	}
 	strRpcUri += _T("rest/api");
-	m_strUri = CW2A(strRpcUri);
+	m_bstrUri = CW2A(strRpcUri);
 	return S_OK;
 }
 
@@ -38,8 +38,8 @@ STDMETHODIMP CJiraConnection::Login(BSTR bstrUser, BSTR bstrPwd)
 	if(bstrUser == NULL || bstrPwd == NULL)
 		return COMADMIN_E_USERPASSWDNOTVALID;
 
-	m_user = CW2A(bstrUser);
-	m_passwd = CW2A(bstrPwd);
+	m_bstrUser = bstrUser;
+	m_bstrPasswd = bstrPwd;
 
 	return S_OK;
 }
@@ -69,9 +69,9 @@ void CJiraConnection::CopyToStringMap(const JSONObject& source, map<wstring, wst
 	}
 }
 
-STDMETHODIMP CJiraConnection::RemoteCall(string& strQuery, string& strResult)
+STDMETHODIMP CJiraConnection::RemoteCall(BSTR bstrQuery, BSTR* pbstrResult)
 {
-	auto hr = m_curlConnection.RemoteCall(strQuery, m_user, m_passwd, strResult);
+	auto hr = m_pHttpConnection->RemoteCall(bstrQuery, m_bstrUser, m_bstrPasswd, pbstrResult);
 
 	if (FAILED(hr))
 	{
@@ -97,10 +97,11 @@ STDMETHODIMP CJiraConnection::GetCurrentUser(IJiraObject** ppObject)
 
 	USES_CONVERSION;
 
-	string strUrl(m_strUri + string("/2/myself"));
-	string strResult;
-	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+	CComBSTR bstrUrl(m_bstrUri);
+    bstrUrl.Append(L"/2/myself");
+	CComBSTR bstrResult;
+	RETURN_IF_FAILED(RemoteCall(bstrUrl, &bstrResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(bstrResult));
 	ATLASSERT(value);
 	
 	map<wstring, wstring> valueMap;
@@ -125,18 +126,16 @@ STDMETHODIMP CJiraConnection::GetIssuesByCriteria(BSTR bstrSearchCriteria, IJira
 		strFields = strFields.Left(strFields.GetLength() - 1);
 
 	USES_CONVERSION;
-	string strUrl(m_strUri);
-	strUrl += string("/2/search");
+	wstring strUrl(m_bstrUri);
+    strUrl += L"/2/search";
 
-	auto strFieldsA = string(CW2A(strFields));
-	strUrl += string("?fields=") + urlencode(strFieldsA);
+    strUrl += L"?fields="+ urlencodew(wstring(strFields));
 
-	string searchQueryA(CW2A(searchQuery.c_str()));
-	strUrl += string("&jql=") + urlencode(searchQueryA);
+    strUrl += L"&jql=" + urlencodew(searchQuery);
 
-	string strResult;
-	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+    CComBSTR bstrResult;
+	RETURN_IF_FAILED(RemoteCall(CComBSTR(strUrl.c_str()), &bstrResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(bstrResult));
 
     if (!value)
         return HRESULT_FROM_WIN32(DNS_ERROR_INVALID_XML);
@@ -200,10 +199,11 @@ STDMETHODIMP CJiraConnection::GetFavoriteFilters(IJiraObjectsCollection** ppColl
 
 	USES_CONVERSION;
 
-	string strUrl(m_strUri + string("/2/filter/favourite"));
-	string strResult;
-	RETURN_IF_FAILED(RemoteCall(strUrl, strResult));
-	auto value = shared_ptr<JSONValue>(JSON::Parse(strResult.c_str()));
+	CComBSTR bstrUrl(m_bstrUri);
+    bstrUrl.Append(L"/2/filter/favourite");
+    CComBSTR bstrResult;
+	RETURN_IF_FAILED(RemoteCall(bstrUrl, &bstrResult));
+	auto value = shared_ptr<JSONValue>(JSON::Parse(bstrResult));
 	ATLASSERT(value);
 
 	CComObject<CJiraObjectsCollection>* pCollectionClass;

@@ -5,7 +5,6 @@
 #include "JiraConnection_i.h"
 #include "JiraObjectsCollection.h"
 #include "JiraObject.h"
-#include "CurlConnection.h"
 #include "netmdl_contract_i.h"
 #include "..\model-libs\netmdl\Plugins.h"
 #include "..\model-libs\netmdl\Metadata.h"
@@ -36,17 +35,16 @@ public:
 	END_COM_MAP()
 
 private:
-	string m_user;
-	string m_passwd;
+    CComBSTR m_bstrUser;
+	CComBSTR m_bstrPasswd;
 	CString m_strLastErrorMsg;
 	std::set<std::wstring> m_supportedValues;
-	CCurlConnection m_curlConnection;
-	string m_strUri;
+    CComBSTR m_bstrUri;
     CComPtr<IHttpConnection> m_pHttpConnection;
 
 	void CopyToStringMap(const JSONObject& source, std::map<std::wstring, std::wstring>& dest);
 	void InitStoredValuesMap();
-	STDMETHOD(RemoteCall)(string& strQuery, string& strResult);
+	STDMETHOD(RemoteCall)(BSTR bstrQuery, BSTR* pbstrResult);
 
 public:
 
