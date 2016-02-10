@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include "UpdateViewService.h"
 #include "JiraNotify_i.h"
+#include "..\model-libs\objmdl\stringutils.h"
+#include "..\JiraConnection\JiraFields.h"
 
 // CUpdateViewService
 
@@ -31,7 +33,7 @@ STDMETHODIMP CUpdateViewService::OnInitialized(IServiceProvider *pServiceProvide
 	RETURN_IF_FAILED(pMainDialog->SetIcon(hIconSmall, FALSE));
 
 	UINT uTimeout = 10;
-	CComVariant vInterval;
+    CComVar vInterval;
 	if (SUCCEEDED(m_pSettings->GetVariantValue(AsyncServices::Metadata::Timer::Interval, &vInterval)) && vInterval.vt == VT_I4)
 		uTimeout = vInterval.intVal;
 
@@ -92,7 +94,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 	RETURN_IF_FAILED(ClearLastState());
 	RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNormalIcon());
 
-	CComVariant vHr;
+    CComVar vHr;
 	RETURN_IF_FAILED(pResult->GetVariantValue(AsyncServices::Metadata::Thread::HResult, &vHr));
 	HRESULT hr = S_OK;
 	if (vHr.vt == VT_I4)
@@ -100,26 +102,70 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 
 	if (hr == S_OK)
 	{
-		CComVariant vHasChanges;
+        CComVar vHasChanges;
 		if (SUCCEEDED(pResult->GetVariantValue(KEY_HAS_CHANGES, &vHasChanges)) && vHasChanges.vt == VT_BOOL && vHasChanges.boolVal)
 		{
 			RETURN_IF_FAILED(m_pTrayNotifyManager->ShowNewItemsIcon());
 			CString strMessage;
-			strMessage.LoadString(IDS_CHANGESMESSAGE);
-			CString strCaption;
-			strCaption.LoadString(IDS_CAPTIONCHANGES);
-			RETURN_IF_FAILED(m_pTrayNotifyManager->ShowBaloon(strMessage, strCaption, SystrayBalloonStyle::Info, INFINITE));
+			//strMessage.LoadString(IDS_CHANGESMESSAGE);
+
+            CComVar vServerIssues;
+            RETURN_IF_FAILED(pResult->GetVariantValue(KEY_ISSUES, &vServerIssues));
+            ATLASSERT(vServerIssues.vt == VT_UNKNOWN);
+            m_pJiraObjectsCollection = vServerIssues.punkVal;
+
+            CComVar vServerIssuesKeys;
+            RETURN_IF_FAILED(pResult->GetVariantValue(KEY_ISSUES_NEW_KEYS, &vServerIssuesKeys));
+
+            vector<CString> vStrKeys;
+            StrSplit(vServerIssuesKeys.bstrVal, L";", vStrKeys);
+
+            for (auto& it : vStrKeys)
+            {
+                CComBSTR bstrKey(it);
+                CComQIPtr<IObjArray> pObjArray = m_pJiraObjectsCollection;
+                ATLASSERT(pObjArray);
+                UINT uiCount = 0;
+                RETURN_IF_FAILED(pObjArray->GetCount(&uiCount));
+                for (size_t i = 0; i < uiCount; i++)
+                {
+                    CComPtr<IVariantObject> pJiraObject;
+                    RETURN_IF_FAILED(pObjArray->GetAt(i, __uuidof(IVariantObject), (LPVOID*)&pJiraObject));
+                    ATLASSERT(pJiraObject);
+                    CComVar vId;
+                    RETURN_IF_FAILED(pJiraObject->GetVariantValue(JF_ID, &vId));
+                    ATLASSERT(vId.vt == VT_BSTR);
+                    if (bstrKey == vId.bstrVal)
+                    {
+                        CComVar vKey;
+                        RETURN_IF_FAILED(pJiraObject->GetVariantValue(JF_KEY, &vKey));
+                        ATLASSERT(vKey.vt == VT_BSTR);
+                        CComVar vSummary;
+                        RETURN_IF_FAILED(pJiraObject->GetVariantValue(JF_SUMMARY, &vSummary));
+                        ATLASSERT(vSummary.vt == VT_BSTR);
+
+                        CString strIssueDescription;
+                        strIssueDescription.Format(L"%s: %s...", vKey.bstrVal, CString(vSummary.bstrVal).Left(30));
+                        strMessage += strIssueDescription;
+                        strMessage += L"\n";
+                    }
+                }
+            }
+
+            const int max_count = 250;
+            if (strMessage.GetLength() > max_count)
+            {
+                strMessage = strMessage.Left(max_count);
+                strMessage += L"...";
+            }
+
+            CString strCaption;
+            strCaption.LoadString(IDS_CAPTIONCHANGES);
+            RETURN_IF_FAILED(m_pTrayNotifyManager->ShowBaloon(strMessage, strCaption, SystrayBalloonStyle::Info, INFINITE));
 
 			m_strLastCaption = strCaption;
 			m_strLastMessage = strMessage;
 			m_lastBaloonStyle = SystrayBalloonStyle::Info;
-
-			CComVariant vServerIssues;
-			RETURN_IF_FAILED(pResult->GetVariantValue(KEY_ISSUES, &vServerIssues));
-			if (vServerIssues.vt == VT_UNKNOWN)
-			{
-				m_pJiraObjectsCollection = vServerIssues.punkVal;
-			}
 		}
 	}
 	else
@@ -127,7 +173,7 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
 		RETURN_IF_FAILED(m_pTrayNotifyManager->ShowErrorIcon());
 		CString strMessage = _com_error(hr).ErrorMessage();
 		CString strLastErrorMessage;
-		CComVariant vMessage;
+        CComVar vMessage;
 		if (SUCCEEDED(pResult->GetVariantValue(KEY_HAS_MESSAGE, &vMessage)) && vMessage.vt == VT_BSTR)
 		{
 			strLastErrorMessage = vMessage.bstrVal;

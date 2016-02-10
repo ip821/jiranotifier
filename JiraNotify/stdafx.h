@@ -54,6 +54,7 @@
 #define KEY_HAS_CHANGES L"HasChanges"
 #define KEY_HAS_MESSAGE L"HasMessage"
 #define KEY_ISSUES L"Issues"
+#define KEY_ISSUES_NEW_KEYS L"NewIds"
 
 using namespace IP;
 

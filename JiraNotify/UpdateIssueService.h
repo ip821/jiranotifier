@@ -41,7 +41,7 @@ private:
 	DWORD m_dwAdvice = 0;
 	boost::mutex m_mutex;
 
-	HRESULT Diff(IJiraObjectsCollection* pFirstCollection, IJiraObjectsCollection* pSecondCollection, IVariantObject* pResultObject);
+	HRESULT Diff(IJiraObjectsCollection* pFirstCollection, IJiraObjectsCollection* pSecondCollection, IVariantObject* pResultObject, TStringVector& vectorNewIds);
 	HRESULT FillKeysVector(TStringVector& destVector, IJiraObjectsCollection* pSourceCollection);
 	void HandleJiraError(IJiraConnection *pJiraXmlRpcConnection, IVariantObject* pResultObject);
 

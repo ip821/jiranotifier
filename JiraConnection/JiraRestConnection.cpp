@@ -21,6 +21,7 @@ STDMETHODIMP CJiraConnection::OpenConnection(BSTR bstrUri)
 		return INET_E_INVALID_URL;
 
     RETURN_IF_FAILED(HrCoCreateInstance(CLSID_HttpConnection, &m_pHttpConnection));
+    RETURN_IF_FAILED(m_pHttpConnection->SetEncoding(CP_UTF8));
 
 	CString strRpcUri = bstrUri;
 	int iLen = strRpcUri.GetLength();

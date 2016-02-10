@@ -10,7 +10,7 @@ STDMETHODIMP CJiraObject::SetItem(std::map<std::wstring,std::wstring>& val)
 {
 	for (auto it = val.cbegin(); it != val.cend(); it++)
 	{
-		RETURN_IF_FAILED(m_pVariantObject->SetVariantValue(CComBSTR(it->first.c_str()), &CComVariant(CComBSTR(it->second.c_str()))));
+		RETURN_IF_FAILED(m_pVariantObject->SetVariantValue(CComBSTR(it->first.c_str()), &CComVar(CComBSTR(it->second.c_str()))));
 	}
 
 	return S_OK;
@@ -38,7 +38,7 @@ STDMETHODIMP CJiraObject::Load(IStream *pStm)
 
 		RETURN_IF_FAILED(strKey.ReadFromStream(pStm));
 		RETURN_IF_FAILED(strValue.ReadFromStream(pStm));
-		RETURN_IF_FAILED(m_pVariantObject->SetVariantValue(strKey, &CComVariant(strValue)));
+		RETURN_IF_FAILED(m_pVariantObject->SetVariantValue(strKey, &CComVar(strValue)));
 	}
 
 	return S_OK;
@@ -59,7 +59,7 @@ STDMETHODIMP CJiraObject::Save(IStream *pStm, BOOL fClearDirty)
 	{
 		CComBSTR strKey;
 		RETURN_IF_FAILED(m_pVariantObject->GetKeyByIndex(i, &strKey));
-		CComVariant vValue;
+        CComVar vValue;
 		RETURN_IF_FAILED(m_pVariantObject->GetVariantValue(strKey, &vValue));
 		CComBSTR strValue;
 		if (vValue.vt == VT_BSTR)

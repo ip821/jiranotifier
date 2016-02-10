@@ -41,7 +41,7 @@ STDMETHODIMP COpenJiraCommand::InstallMenu(IMenu* pMenu)
 STDMETHODIMP COpenJiraCommand::Invoke(REFGUID guidCommand)
 {
 	RETURN_IF_FAILED(m_pUpdateViewService->ResetIcon());
-	CComVariant vServer;
+    CComVar vServer;
 	if (SUCCEEDED(m_pSettings->GetVariantValue(KEY_SERVER, &vServer)) && vServer.vt == VT_BSTR)
 	{
 		ShellExecute(NULL, L"open", vServer.bstrVal, NULL, NULL, SW_SHOW);
