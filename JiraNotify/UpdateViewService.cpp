@@ -145,9 +145,9 @@ STDMETHODIMP CUpdateViewService::OnFinish(IVariantObject* pResult)
                         ATLASSERT(vSummary.vt == VT_BSTR);
 
                         CString strIssueDescription;
-                        strIssueDescription.Format(L"%s: %s...", vKey.bstrVal, CString(vSummary.bstrVal).Left(30));
+                        strIssueDescription.Format(L"%s: %s", vKey.bstrVal, vSummary.bstrVal);
                         strMessage += strIssueDescription;
-                        strMessage += L"\n";
+                        break;
                     }
                 }
             }
