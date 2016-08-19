@@ -58,5 +58,5 @@
 
 using namespace IP;
 
-#define FILTER_ASSIGNED_TO_ME L"assignee = currentUser() AND status in(Open, \"In Progress\", Reopened) ORDER BY priority DESC, key DESC"
+#define FILTER_ASSIGNED_TO_ME L"assignee = currentUser() AND status in(Open, \"In Progress\", \"TO DO\", Reopened) ORDER BY priority DESC, key DESC"
 #define FILTER_ASSIGNED_TO_ME_NAME L"Assigned to me"
